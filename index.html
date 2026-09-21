@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>GAME-GENERATOR</title>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
@@ -26,7 +31,6 @@ body {
 
 h1 {
     text-align: center;
-    margin-bottom: 20px;
 }
 
 .card {
@@ -41,8 +45,8 @@ button {
     width: 100%;
     padding: 13px;
     margin-top: 10px;
-    border-radius: 8px;
     border: none;
+    border-radius: 8px;
     font-size: 16px;
 }
 
@@ -52,8 +56,8 @@ input {
 }
 
 button {
-    cursor: pointer;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .loginBtn {
@@ -89,9 +93,9 @@ button {
 }
 
 .gameId {
-    font-size: 20px;
-    font-weight: bold;
     text-align: center;
+    font-size: 21px;
+    font-weight: bold;
     margin-bottom: 15px;
 }
 
@@ -99,27 +103,29 @@ button {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 6px;
-    margin-top: 15px;
 }
 
 .cell {
     background: #334155;
-    padding: 15px 5px;
+    padding: 16px 5px;
     text-align: center;
     border-radius: 6px;
-    font-size: 18px;
+    font-size: 19px;
     font-weight: bold;
 }
 
 .total {
-    margin-top: 12px;
+    margin-top: 10px;
     padding: 10px;
     background: #0f172a;
     border-radius: 6px;
     text-align: center;
 }
+
 </style>
+
 </head>
+
 
 <body>
 
@@ -127,813 +133,1010 @@ button {
 
 <h1>GAME-GENERATOR</h1>
 
+
 <!-- LOGIN -->
+
 <div id="loginCard" class="card">
 
-    <h2>ADMIN LOGIN</h2>
+<h2>ADMIN LOGIN</h2>
 
-    <input
-        type="email"
-        id="email"
-        placeholder="Admin Email"
-    >
+<input
+    type="email"
+    id="email"
+    placeholder="Admin Email"
+>
 
-    <input
-        type="password"
-        id="password"
-        placeholder="Password"
-    >
+<input
+    type="password"
+    id="password"
+    placeholder="Password"
+>
 
-    <button
-        class="loginBtn"
-        onclick="adminLogin()"
-    >
-        LOGIN
-    </button>
+<button
+    class="loginBtn"
+    onclick="adminLogin()"
+>
+LOGIN
+</button>
 
-    <div id="loginStatus" class="status"></div>
+<div
+    id="loginStatus"
+    class="status"
+>
+</div>
 
 </div>
+
 
 
 <!-- ADMIN PANEL -->
-<div id="adminPanel" class="hidden">
 
-    <div class="card">
+<div
+    id="adminPanel"
+    class="hidden"
+>
 
-        <h2>GAME GENERATOR</h2>
+<div class="card">
 
-        <p>
-            Game IDs:
-            <b>MKND840001</b>
-            to
-            <b>MKND842500</b>
-        </p>
+<h2>GAME GENERATOR</h2>
 
-        <p>
-            Numbers:
-            <b>1 - 25</b>
-        </p>
+<p>
+Game IDs:
+<b>MKND840001 - MKND840050</b>
+</p>
 
-        <p>
-            Grid:
-            <b>4 × 4</b>
-        </p>
+<p>
+Numbers:
+<b>1 - 25</b>
+</p>
 
-        <p>
-            Rule:
-            <b>Rows + Columns only</b>
-        </p>
+<p>
+Grid:
+<b>4 × 4</b>
+</p>
 
-        <button
-            class="generateBtn"
-            onclick="generateGames()"
-        >
-            GENERATE & SAVE 2500 GAMES
-        </button>
+<p>
+Rule:
+<b>Row Total = Column Total</b>
+</p>
 
-        <button
-            class="stopBtn"
-            onclick="stopGeneration()"
-        >
-            STOP
-        </button>
-
-        <button
-            class="logoutBtn"
-            onclick="logout()"
-        >
-            LOGOUT
-        </button>
-
-        <div id="status" class="status">
-            Ready.
-        </div>
-
-    </div>
+<p>
+<b>Diagonal checking is OFF</b>
+</p>
 
 
-    <!-- PREVIEW -->
-    <div id="previewCard" class="card hidden">
+<button
+    class="generateBtn"
+    onclick="generateGames()"
+>
+GENERATE & SAVE 50 GAMES
+</button>
 
-        <div id="previewGameId" class="gameId"></div>
 
-        <div id="grid" class="grid"></div>
+<button
+    class="stopBtn"
+    onclick="stopGeneration()"
+>
+STOP
+</button>
 
-        <div id="rowTotals" class="total"></div>
 
-        <div id="columnTotals" class="total"></div>
+<button
+    class="logoutBtn"
+    onclick="logout()"
+>
+LOGOUT
+</button>
 
-        <div id="magicTotal" class="total"></div>
 
-    </div>
+<div
+    id="status"
+    class="status"
+>
+Ready.
+</div>
+
+</div>
+
+
+
+<!-- PREVIEW -->
+
+<div
+    id="previewCard"
+    class="card hidden"
+>
+
+<div
+    id="previewGameId"
+    class="gameId"
+>
+</div>
+
+
+<div
+    id="grid"
+    class="grid"
+>
+</div>
+
+
+<div
+    id="rowTotal"
+    class="total"
+>
+</div>
+
+
+<div
+    id="columnTotal"
+    class="total"
+>
+</div>
+
 
 </div>
 
 </div>
+
+</div>
+
 
 
 <script type="module">
 
+
+/* =========================================
+   FIREBASE IMPORTS
+========================================= */
+
 import {
     initializeApp
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+}
+from
+"https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
 
 import {
     getAuth,
     signInWithEmailAndPassword,
     onAuthStateChanged,
     signOut
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+}
+from
+"https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
 
 import {
     getFirestore,
     doc,
     getDoc,
-    getDocs,
-    collection,
     writeBatch,
     serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+}
+from
+"https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 
-/* =========================
+
+/* =========================================
    FIREBASE CONFIG
-========================= */
+========================================= */
 
 const firebaseConfig = {
-    apiKey: "AIzaSyD2ZItFk5xcqFUCLMehkoWtK88hjujkMuc",
-    authDomain: "bangaram-34c98.firebaseapp.com",
-    projectId: "bangaram-34c98",
-    storageBucket: "bangaram-34c98.firebasestorage.app",
-    messagingSenderId: "382943394283",
-    appId: "1:382943394283:web:bf11bb5597dfd2782881ae"
+
+    apiKey:
+    "AIzaSyD2ZItFk5xcqFUCLMehkoWtK88hjujkMuc",
+
+    authDomain:
+    "bangaram-34c98.firebaseapp.com",
+
+    projectId:
+    "bangaram-34c98",
+
+    storageBucket:
+    "bangaram-34c98.firebasestorage.app",
+
+    messagingSenderId:
+    "382943394283",
+
+    appId:
+    "1:382943394283:web:bf11bb5597dfd2782881ae"
+
 };
 
 
-/* =========================
-   FIREBASE INITIALIZE
-========================= */
 
-const app = initializeApp(firebaseConfig);
+/* =========================================
+   FIREBASE START
+========================================= */
 
-const auth = getAuth(app);
-
-const db = getFirestore(app);
+const app =
+initializeApp(firebaseConfig);
 
 
-/* =========================
+const auth =
+getAuth(app);
+
+
+const db =
+getFirestore(app);
+
+
+
+/* =========================================
    ADMIN UID
-========================= */
+========================================= */
 
 const ADMIN_UID =
-    "rlUDXoyMRNcYYad6liiF9tq3M2t2";
+"rlUDXoyMRNcYYad6liiF9tq3M2t2";
 
 
-/* =========================
-   VARIABLES
-========================= */
+
+/* =========================================
+   CONTROL
+========================================= */
 
 let stopRequested = false;
 
-let existingGames = new Set();
 
 
-/* =========================
-   LOGIN
-========================= */
+/* =========================================
+   ADMIN LOGIN
+========================================= */
 
-window.adminLogin = async function () {
+window.adminLogin = async function() {
 
     const email =
-        document.getElementById("email").value.trim();
+    document
+    .getElementById("email")
+    .value
+    .trim();
+
 
     const password =
-        document.getElementById("password").value;
+    document
+    .getElementById("password")
+    .value;
+
 
     const status =
-        document.getElementById("loginStatus");
+    document
+    .getElementById("loginStatus");
+
 
     if (!email || !password) {
 
         status.innerText =
-            "Please enter email and password.";
+        "Enter email and password.";
 
         return;
     }
 
-    status.innerText = "Logging in...";
+
+    status.innerText =
+    "Logging in...";
+
 
     try {
 
         const result =
-            await signInWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
+        await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
 
-        if (result.user.uid !== ADMIN_UID) {
+
+        if (
+            result.user.uid !== ADMIN_UID
+        ) {
 
             await signOut(auth);
 
             status.innerText =
-                "Access denied. Admin only.";
+            "Access denied. Admin only.";
 
             return;
         }
 
-        status.innerText =
-            "Admin login successful.";
 
-    } catch (error) {
+        status.innerText =
+        "Admin login successful.";
+
+    }
+
+    catch(error) {
 
         console.error(error);
 
         status.innerText =
-            "Login error: " + error.message;
+        "Login error: " +
+        error.message;
+
     }
+
 };
 
 
-/* =========================
+
+/* =========================================
    AUTH STATE
-========================= */
+========================================= */
 
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(
+    auth,
+    function(user) {
 
-    const loginCard =
-        document.getElementById("loginCard");
+        const loginCard =
+        document
+        .getElementById("loginCard");
 
-    const adminPanel =
-        document.getElementById("adminPanel");
 
-    if (user && user.uid === ADMIN_UID) {
+        const adminPanel =
+        document
+        .getElementById("adminPanel");
 
-        loginCard.classList.add("hidden");
 
-        adminPanel.classList.remove("hidden");
+        if (
+            user &&
+            user.uid === ADMIN_UID
+        ) {
 
-        document.getElementById("status").innerText =
-            "Admin connected to Firebase.";
+            loginCard
+            .classList
+            .add("hidden");
 
-    } else {
 
-        loginCard.classList.remove("hidden");
+            adminPanel
+            .classList
+            .remove("hidden");
 
-        adminPanel.classList.add("hidden");
+
+            document
+            .getElementById("status")
+            .innerText =
+            "Admin connected.";
+
+        }
+
+        else {
+
+            loginCard
+            .classList
+            .remove("hidden");
+
+
+            adminPanel
+            .classList
+            .add("hidden");
+
+        }
+
     }
+);
 
-});
 
 
-/* =========================
+/* =========================================
    LOGOUT
-========================= */
+========================================= */
 
-window.logout = async function () {
+window.logout = async function() {
 
     await signOut(auth);
 
 };
 
 
-/* =========================
-   RANDOM SHUFFLE
-========================= */
 
-function shuffle(array) {
+/* =========================================
+   BASE 4 × 4 MAGIC SQUARE
+   NUMBERS 1 - 16
+   TOTAL = 34
+========================================= */
 
-    const a = [...array];
+const baseSquare = [
 
-    for (let i = a.length - 1; i > 0; i--) {
+    [16, 2, 3, 13],
 
-        const j =
-            Math.floor(Math.random() * (i + 1));
+    [5, 11, 10, 8],
 
-        [a[i], a[j]] =
-            [a[j], a[i]];
+    [9, 7, 6, 12],
+
+    [4, 14, 15, 1]
+
+];
+
+
+
+/* =========================================
+   ROTATE SQUARE
+========================================= */
+
+function rotateSquare(square) {
+
+    const result = [
+
+        [0, 0, 0, 0],
+
+        [0, 0, 0, 0],
+
+        [0, 0, 0, 0],
+
+        [0, 0, 0, 0]
+
+    ];
+
+
+    for (
+        let r = 0;
+        r < 4;
+        r++
+    ) {
+
+        for (
+            let c = 0;
+            c < 4;
+            c++
+        ) {
+
+            result[c][3 - r] =
+            square[r][c];
+
+        }
+
     }
 
-    return a;
+
+    return result;
+
 }
 
 
-/* =========================
-   CREATE VALID 4x4 GAME
-   NUMBERS 1 - 25
-   16 UNIQUE NUMBERS
-   ROWS = COLUMNS
-   NO DIAGONALS
-========================= */
 
-function createGame() {
+/* =========================================
+   FLIP LEFT / RIGHT
+========================================= */
+
+function flipSquare(square) {
+
+    const result = [
+
+        [0, 0, 0, 0],
+
+        [0, 0, 0, 0],
+
+        [0, 0, 0, 0],
+
+        [0, 0, 0, 0]
+
+    ];
+
+
+    for (
+        let r = 0;
+        r < 4;
+        r++
+    ) {
+
+        for (
+            let c = 0;
+            c < 4;
+            c++
+        ) {
+
+            result[r][3 - c] =
+            square[r][c];
+
+        }
+
+    }
+
+
+    return result;
+
+}
+
+
+
+/* =========================================
+   CREATE UNIQUE GAME
+   VALUES 1 - 25
+========================================= */
+
+function createGame(gameNumber) {
 
     /*
-       We create four rows.
+       There are 10 possible shifts.
 
-       Every row has the same target.
+       Shift 0:
+       1 - 16
 
-       Example:
+       Shift 1:
+       2 - 17
 
-       8  7  9  10 = 34
-       9  10 8  7  = 34
        ...
 
-       Numbers are unique.
+       Shift 9:
+       10 - 25
     */
 
-    const allNumbers =
-        Array.from(
-            { length: 25 },
-            (_, i) => i + 1
-        );
+
+    const shift =
+    Math.floor(gameNumber / 8) % 10;
+
+
+    let square =
+    baseSquare.map(
+        row => row.map(
+            value => value + shift
+        )
+    );
 
 
     /*
-       Try different random selections.
+       Different orientation
+       for every game.
     */
 
-    for (let attempt = 0; attempt < 5000; attempt++) {
-
-        const selected =
-            shuffle(allNumbers).slice(0, 16);
-
-        /*
-           Split into 4 rows.
-        */
-
-        const rows = [
-
-            selected.slice(0, 4),
-
-            selected.slice(4, 8),
-
-            selected.slice(8, 12),
-
-            selected.slice(12, 16)
-
-        ];
+    const rotation =
+    gameNumber % 8;
 
 
-        /*
-           Row total.
-        */
+    if (rotation >= 4) {
 
-        const rowTotal =
-            rows[0].reduce(
-                (sum, n) => sum + n,
-                0
-            );
+        square =
+        flipSquare(square);
 
-
-        /*
-           All rows must have same total.
-        */
-
-        if (
-            rows[1].reduce((s, n) => s + n, 0)
-            !== rowTotal
-        ) continue;
-
-        if (
-            rows[2].reduce((s, n) => s + n, 0)
-            !== rowTotal
-        ) continue;
-
-        if (
-            rows[3].reduce((s, n) => s + n, 0)
-            !== rowTotal
-        ) continue;
-
-
-        /*
-           Check columns.
-        */
-
-        const c1 =
-            rows[0][0] +
-            rows[1][0] +
-            rows[2][0] +
-            rows[3][0];
-
-        const c2 =
-            rows[0][1] +
-            rows[1][1] +
-            rows[2][1] +
-            rows[3][1];
-
-        const c3 =
-            rows[0][2] +
-            rows[1][2] +
-            rows[2][2] +
-            rows[3][2];
-
-        const c4 =
-            rows[0][3] +
-            rows[1][3] +
-            rows[2][3] +
-            rows[3][3];
-
-
-        if (
-            c1 !== rowTotal ||
-            c2 !== rowTotal ||
-            c3 !== rowTotal ||
-            c4 !== rowTotal
-        ) continue;
-
-
-        /*
-           Valid game.
-        */
-
-        return {
-            rows,
-            magicTotal: rowTotal
-        };
     }
 
 
-    return null;
+    const rotations =
+    rotation % 4;
+
+
+    for (
+        let i = 0;
+        i < rotations;
+        i++
+    ) {
+
+        square =
+        rotateSquare(square);
+
+    }
+
+
+    return square;
+
 }
 
 
-/* =========================
-   CREATE GAME KEY
-========================= */
 
-function gameKey(game) {
+/* =========================================
+   CHECK ROW/COLUMN
+   NO DIAGONAL CHECK
+========================================= */
 
-    return game.rows
-        .flat()
-        .join("-");
+function validateGame(square) {
+
+    const target =
+    square[0][0] +
+    square[0][1] +
+    square[0][2] +
+    square[0][3];
+
+
+    /*
+       ROW CHECK
+    */
+
+    for (
+        let r = 0;
+        r < 4;
+        r++
+    ) {
+
+        const total =
+        square[r][0] +
+        square[r][1] +
+        square[r][2] +
+        square[r][3];
+
+
+        if (total !== target) {
+
+            return false;
+
+        }
+
+    }
+
+
+    /*
+       COLUMN CHECK
+    */
+
+    for (
+        let c = 0;
+        c < 4;
+        c++
+    ) {
+
+        const total =
+        square[0][c] +
+        square[1][c] +
+        square[2][c] +
+        square[3][c];
+
+
+        if (total !== target) {
+
+            return false;
+
+        }
+
+    }
+
+
+    /*
+       UNIQUE CHECK
+    */
+
+    const numbers =
+    square.flat();
+
+
+    const unique =
+    new Set(numbers);
+
+
+    if (
+        unique.size !== 16
+    ) {
+
+        return false;
+
+    }
+
+
+    /*
+       RANGE CHECK
+    */
+
+    for (
+        const n of numbers
+    ) {
+
+        if (
+            n < 1 ||
+            n > 25
+        ) {
+
+            return false;
+
+        }
+
+    }
+
+
+    return true;
+
 }
 
 
-/* =========================
+
+/* =========================================
    SHOW PREVIEW
-========================= */
+========================================= */
 
-function showPreview(gameId, game) {
+function showPreview(
+    gameId,
+    square
+) {
 
     const card =
-        document.getElementById("previewCard");
+    document
+    .getElementById("previewCard");
+
 
     const grid =
-        document.getElementById("grid");
+    document
+    .getElementById("grid");
 
-    document.getElementById("previewGameId")
-        .innerText = gameId;
+
+    document
+    .getElementById("previewGameId")
+    .innerText =
+    gameId;
 
 
     grid.innerHTML = "";
 
 
-    game.rows.flat().forEach(number => {
+    /*
+       UI can use arrays.
+       They are NOT sent to Firestore.
+    */
 
-        const cell =
-            document.createElement("div");
+    for (
+        let r = 0;
+        r < 4;
+        r++
+    ) {
 
-        cell.className = "cell";
+        for (
+            let c = 0;
+            c < 4;
+            c++
+        ) {
 
-        cell.innerText = number;
+            const cell =
+            document
+            .createElement("div");
 
-        grid.appendChild(cell);
 
-    });
+            cell.className =
+            "cell";
+
+
+            cell.innerText =
+            square[r][c];
+
+
+            grid.appendChild(cell);
+
+        }
+
+    }
+
+
+    const target =
+    square[0][0] +
+    square[0][1] +
+    square[0][2] +
+    square[0][3];
+
+
+    document
+    .getElementById("rowTotal")
+    .innerText =
+    "ROW TOTAL: " + target;
+
+
+    document
+    .getElementById("columnTotal")
+    .innerText =
+    "COLUMN TOTAL: " + target;
+
+
+    card
+    .classList
+    .remove("hidden");
+
+}
+
+
+
+/* =========================================
+   CREATE FIRESTORE DATA
+========================================= */
+
+function createFirestoreData(
+    gameId,
+    square
+) {
+
+    /*
+       IMPORTANT:
+
+       NO ARRAY IS RETURNED HERE.
+
+       Only individual numbers.
+    */
+
+
+    const n1 =
+    Number(square[0][0]);
+
+    const n2 =
+    Number(square[0][1]);
+
+    const n3 =
+    Number(square[0][2]);
+
+    const n4 =
+    Number(square[0][3]);
+
+
+    const n5 =
+    Number(square[1][0]);
+
+    const n6 =
+    Number(square[1][1]);
+
+    const n7 =
+    Number(square[1][2]);
+
+    const n8 =
+    Number(square[1][3]);
+
+
+    const n9 =
+    Number(square[2][0]);
+
+    const n10 =
+    Number(square[2][1]);
+
+    const n11 =
+    Number(square[2][2]);
+
+    const n12 =
+    Number(square[2][3]);
+
+
+    const n13 =
+    Number(square[3][0]);
+
+    const n14 =
+    Number(square[3][1]);
+
+    const n15 =
+    Number(square[3][2]);
+
+    const n16 =
+    Number(square[3][3]);
 
 
     const total =
-        game.magicTotal;
+    n1 + n2 + n3 + n4;
 
 
-    document.getElementById("rowTotals")
-        .innerText =
-        `ROW TOTALS: ${total} | ${total} | ${total} | ${total}`;
+    /*
+       THIS OBJECT HAS NO ARRAYS.
+    */
 
+    return {
 
-    document.getElementById("columnTotals")
-        .innerText =
-        `COLUMN TOTALS: ${total} | ${total} | ${total} | ${total}`;
+        gameId: gameId,
 
+        n1: n1,
+        n2: n2,
+        n3: n3,
+        n4: n4,
 
-    document.getElementById("magicTotal")
-        .innerText =
-        `TARGET TOTAL: ${total}`;
+        n5: n5,
+        n6: n6,
+        n7: n7,
+        n8: n8,
 
+        n9: n9,
+        n10: n10,
+        n11: n11,
+        n12: n12,
 
-    card.classList.remove("hidden");
+        n13: n13,
+        n14: n14,
+        n15: n15,
+        n16: n16,
+
+        row1Total: total,
+        row2Total: total,
+        row3Total: total,
+        row4Total: total,
+
+        col1Total: total,
+        col2Total: total,
+        col3Total: total,
+        col4Total: total,
+
+        magicTotal: total,
+
+        createdAt:
+        serverTimestamp()
+
+    };
+
 }
 
 
-/* =========================
-   LOAD EXISTING GAMES
-========================= */
 
-async function loadExistingGames() {
+/* =========================================
+   GENERATE 50 GAMES
+========================================= */
 
-    existingGames.clear();
+window.generateGames =
+async function() {
 
-    const snapshot =
-        await getDocs(
-            collection(db, "games")
+
+    if (
+        !auth.currentUser
+    ) {
+
+        alert(
+            "Please login first."
         );
 
-
-    snapshot.forEach(docSnap => {
-
-        const data =
-            docSnap.data();
-
-
-        /*
-           Old/new format support.
-        */
-
-        if (Array.isArray(data.numbers)) {
-
-            existingGames.add(
-                data.numbers.join("-")
-            );
-
-            return;
-        }
-
-
-        /*
-           Read n1 - n16.
-        */
-
-        const numbers = [];
-
-        for (let i = 1; i <= 16; i++) {
-
-            numbers.push(
-                data["n" + i]
-            );
-        }
-
-
-        if (
-            numbers.every(
-                n => typeof n === "number"
-            )
-        ) {
-
-            existingGames.add(
-                numbers.join("-")
-            );
-        }
-
-    });
-
-}
-
-
-/* =========================
-   GENERATE + SAVE
-========================= */
-
-window.generateGames = async function () {
-
-    if (!auth.currentUser) {
-
-        alert("Please login first.");
-
         return;
+
     }
 
 
-    if (auth.currentUser.uid !== ADMIN_UID) {
+    if (
+        auth.currentUser.uid !== ADMIN_UID
+    ) {
 
-        alert("Admin only.");
+        alert(
+            "Admin only."
+        );
 
         return;
+
     }
 
 
-    stopRequested = false;
+    stopRequested =
+    false;
 
 
     const status =
-        document.getElementById("status");
+    document
+    .getElementById("status");
 
 
     status.innerText =
-        "Reading existing games...";
+    "Starting...";
+
+
+    /*
+       One batch.
+       Only 50 documents.
+    */
+
+    let batch =
+    writeBatch(db);
+
+
+    let saved =
+    0;
 
 
     try {
 
-        await loadExistingGames();
 
-    } catch (error) {
-
-        console.error(error);
-
-        status.innerText =
-            "Cannot read Firestore: " +
-            error.message;
-
-        return;
-    }
+        for (
+            let i = 0;
+            i < 50;
+            i++
+        ) {
 
 
-    let batch =
-        writeBatch(db);
+            if (
+                stopRequested
+            ) {
 
-    let batchCount = 0;
+                status.innerText =
+                "Stopped.";
 
-    let createdCount = 0;
+                return;
 
-    let skippedCount = 0;
-
-
-    const START = 840001;
-
-    const END = 842500;
-
-
-    for (
-        let idNumber = START;
-        idNumber <= END;
-        idNumber++
-    ) {
-
-
-        /*
-           STOP BUTTON
-        */
-
-        if (stopRequested) {
-
-            if (batchCount > 0) {
-
-                try {
-
-                    await batch.commit();
-
-                } catch (error) {
-
-                    console.error(error);
-
-                    status.innerText =
-                        "Stopped, but save error: " +
-                        error.message;
-
-                    return;
-                }
             }
 
 
-            status.innerText =
-                `Stopped. Created: ${createdCount}`;
-
-            return;
-        }
-
-
-        const gameId =
+            const gameId =
             "MKND" +
-            idNumber;
+            String(
+                840001 + i
+            );
 
 
-        /*
-           If this ID already exists,
-           don't overwrite it.
-        */
+            /*
+               Check whether
+               this ID already exists.
+            */
 
-        try {
-
-            const existing =
-                await getDoc(
-                    doc(db, "games", gameId)
-                );
-
-
-            if (existing.exists()) {
-
-                skippedCount++;
-
-                continue;
-            }
-
-        } catch (error) {
-
-            console.error(error);
-
-            status.innerText =
-                "Firestore read error: " +
-                error.message;
-
-            return;
-        }
-
-
-        /*
-           Generate unique game.
-        */
-
-        let game = null;
-
-        let attempts = 0;
-
-
-        while (!game && attempts < 10000) {
-
-            game =
-                createGame();
-
-            attempts++;
-        }
-
-
-        if (!game) {
-
-            status.innerText =
-                "Could not create a valid game.";
-
-            return;
-        }
-
-
-        const key =
-            gameKey(game);
-
-
-        /*
-           Prevent duplicate game numbers.
-        */
-
-        if (existingGames.has(key)) {
-
-            idNumber--;
-
-            continue;
-        }
-
-
-        existingGames.add(key);
-
-
-        /*
-           Flatten values.
-        */
-
-        const numbers =
-            game.rows.flat();
-
-
-        /*
-           IMPORTANT:
-           No nested arrays are saved.
-
-           n1 ... n16 are individual numbers.
-        */
-
-        const gameData = {
-
-            gameId: gameId,
-
-            n1: numbers[0],
-            n2: numbers[1],
-            n3: numbers[2],
-            n4: numbers[3],
-
-            n5: numbers[4],
-            n6: numbers[5],
-            n7: numbers[6],
-            n8: numbers[7],
-
-            n9: numbers[8],
-            n10: numbers[9],
-            n11: numbers[10],
-            n12: numbers[11],
-
-            n13: numbers[12],
-            n14: numbers[13],
-            n15: numbers[14],
-            n16: numbers[15],
-
-            row1Total: game.magicTotal,
-            row2Total: game.magicTotal,
-            row3Total: game.magicTotal,
-            row4Total: game.magicTotal,
-
-            col1Total: game.magicTotal,
-            col2Total: game.magicTotal,
-            col3Total: game.magicTotal,
-            col4Total: game.magicTotal,
-
-            magicTotal: game.magicTotal,
-
-            createdAt: serverTimestamp()
-
-        };
-
-
-        const gameRef =
+            const gameRef =
             doc(
                 db,
                 "games",
@@ -941,111 +1144,170 @@ window.generateGames = async function () {
             );
 
 
-        batch.set(
-            gameRef,
-            gameData
-        );
+            const existing =
+            await getDoc(
+                gameRef
+            );
 
 
-        batchCount++;
-
-        createdCount++;
-
-
-        /*
-           Show latest generated game.
-        */
-
-        showPreview(
-            gameId,
-            game
-        );
-
-
-        /*
-           Firestore batch maximum:
-           keep below 500.
-        */
-
-        if (batchCount >= 400) {
-
-            status.innerText =
-                `Saving... Created: ${createdCount} / 2500`;
-
-            try {
-
-                await batch.commit();
-
-            } catch (error) {
-
-                console.error(error);
+            if (
+                existing.exists()
+            ) {
 
                 status.innerText =
-                    "Save error: " +
-                    error.message;
+                gameId +
+                " already exists. Skipped.";
 
-                return;
+                continue;
+
             }
 
 
-            batch =
-                writeBatch(db);
+            /*
+               Create game.
+            */
 
-            batchCount = 0;
+            const square =
+            createGame(i);
+
+
+            /*
+               Validate.
+            */
+
+            if (
+                !validateGame(square)
+            ) {
+
+                status.innerText =
+                "Game validation failed: " +
+                gameId;
+
+                return;
+
+            }
+
+
+            /*
+               Show it.
+            */
+
+            showPreview(
+                gameId,
+                square
+            );
+
+
+            /*
+               Create ONLY scalar
+               Firestore fields.
+            */
+
+            const data =
+            createFirestoreData(
+                gameId,
+                square
+            );
+
+
+            /*
+               Save.
+
+               NO nested arrays.
+            */
+
+            batch.set(
+                gameRef,
+                data
+            );
+
+
+            saved++;
+
+
+            status.innerText =
+            "Prepared " +
+            saved +
+            " / 50 : " +
+            gameId;
+
         }
 
 
         /*
-           Update progress.
+           Commit all 50.
         */
 
-        status.innerText =
-            `Generated: ${createdCount} | Existing skipped: ${skippedCount} | Current: ${gameId}`;
-    }
+        if (
+            saved > 0
+        ) {
 
+            status.innerText =
+            "Saving " +
+            saved +
+            " games to Firebase...";
 
-    /*
-       Save remaining games.
-    */
-
-    if (batchCount > 0) {
-
-        try {
 
             await batch.commit();
 
-        } catch (error) {
-
-            console.error(error);
-
-            status.innerText =
-                "Final save error: " +
-                error.message;
-
-            return;
         }
+
+
+        status.innerText =
+        "SUCCESS: " +
+        saved +
+        " games saved to Firestore.";
+
+        alert(
+            saved +
+            " games saved successfully."
+        );
+
     }
 
 
-    status.innerText =
-        `COMPLETED. Created: ${createdCount} | Existing skipped: ${skippedCount}`;
+    catch(error) {
+
+        console.error(
+            "FIRESTORE ERROR:",
+            error
+        );
+
+
+        status.innerText =
+        "ERROR: " +
+        error.message;
+
+
+        alert(
+            "Firebase Error:\n\n" +
+            error.message
+        );
+
+    }
 
 };
 
 
-/* =========================
+
+/* =========================================
    STOP
-========================= */
+========================================= */
 
-window.stopGeneration = function () {
+window.stopGeneration =
+function() {
 
-    stopRequested = true;
+    stopRequested =
+    true;
 
-    document.getElementById("status")
-        .innerText =
-        "Stopping after current save...";
+
+    document
+    .getElementById("status")
+    .innerText =
+    "Stopping...";
 
 };
+
 
 </script>
 

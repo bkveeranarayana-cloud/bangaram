@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>GAME-GENERATOR</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:15px;
+    background:#101522;
+    color:white;
+    font-family:Arial,sans-serif;
+}
+
+.container{
+    max-width:520px;
+    margin:auto;
+}
+
+h1{
+    text-align:center;
+    color:#00e5ff;
+}
+
+.card{
+    background:#1b2333;
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:15px;
+}
+
+label{
+    display:block;
+    margin-top:10px;
+    margin-bottom:5px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border:0;
+    border-radius:7px;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:13px;
+    margin-top:12px;
+    border:0;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.login{
+    background:#00c853;
+    color:white;
+}
+
+.generate{
+    background:#2196f3;
+    color:white;
+}
+
+.stop{
+    background:#f44336;
+    color:white;
+}
+
+.logout{
+    background:#9c27b0;
+    color:white;
+}
+
+button:disabled{
+    opacity:.45;
+}
+
+.status{
+    margin-top:12px;
+    padding:12px;
+    background:#111827;
+    border-radius:8px;
+    line-height:1.6;
+}
+
+.progress{
+    width:100%;
+    height:20px;
+    background:#333;
+    border-radius:10px;
+    overflow:hidden;
+    margin-top:12px;
+}
+
+.progressBar{
+    height:100%;
+    width:0%;
+    background:#00c853;
+    transition:.2s;
+}
+
+#generatorArea{
+    display:none;
+}
+
+.ok{
+    color:#00e676;
+}
+
+.err{
+    color:#ff5252;
+}
+
+.warn{
+    color:#ffca28;
+}
+
+.gamePreview{
+    margin-top:15px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:5px;
+}
+
+.box{
+    background:#263248;
+    padding:12px 5px;
+    text-align:center;
+    border-radius:5px;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>GAME-GENERATOR</h1>
+
+<!-- ADMIN LOGIN -->
+<div id="loginArea" class="card">
+
+<h2>ADMIN LOGIN</h2>
+
+<label>Email</label>
+<input id="email" type="email" placeholder="Admin email">
+
+<label>Password</label>
+<input id="password" type="password" placeholder="Password">
+
+<button class="login" onclick="adminLogin()">
+LOGIN
+</button>
+
+<div id="loginStatus"></div>
+
+</div>
+
+
+<!-- GENERATOR -->
+<div id="generatorArea">
+
+<div class="card">
+
+<h2>GAME SETTINGS</h2>
+
+<label>Start Game ID</label>
+<input id="startId" value="MKND840001" readonly>
+
+<label>End Game ID</label>
+<input id="endId" value="MKND842500" readonly>
+
+<label>Number Range</label>
+<input value="1 - 25" readonly>
+
+<label>Total Games</label>
+<input value="2500" readonly>
+
+</div>
+
+
+<div class="card">
+
+<h2>FIREBASE</h2>
+
+<div id="firebaseStatus" class="status">
+Connecting...
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>GENERATOR</h2>
+
+<div id="generationStatus" class="status">
+Ready
+</div>
+
+<div class="progress">
+<div id="progressBar" class="progressBar"></div>
+</div>
+
+<button
+id="generateButton"
+class="generate"
+onclick="generateGames()">
+GENERATE & SAVE GAMES
+</button>
+
+<button
+id="stopButton"
+class="stop"
+onclick="stopGeneration()"
+disabled>
+STOP
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h2>LAST GAME</h2>
+
+<div id="lastGame">
+No game generated yet.
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>SAVED GAMES</h2>
+
+<div id="savedInfo">
+Checking...
+</div>
+
+</div>
+
+
+<div class="card">
+
+<button class="logout" onclick="logoutAdmin()">
+LOGOUT
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script type="module">
+
+/* =====================================================
+   FIREBASE
+===================================================== */
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+import {
+    getFirestore,
+    collection,
+    doc,
+    getDocs,
+    query,
+    orderBy,
+    limit,
+    writeBatch
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+
+/* =====================================================
+   BANGARAM FIREBASE CONFIG
+===================================================== */
+
+const firebaseConfig = {
+
+    apiKey:
+    "AIzaSyD2ZItFk5xcqFUCLMehkoWtK88hjujkMuc",
+
+    authDomain:
+    "bangaram-34c98.firebaseapp.com",
+
+    projectId:
+    "bangaram-34c98",
+
+    storageBucket:
+    "bangaram-34c98.firebasestorage.app",
+
+    messagingSenderId:
+    "382943394283",
+
+    appId:
+    "1:382943394283:web:bf11bb5597dfd2782881ae"
+};
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+
+/* =====================================================
+   ADMIN UID
+===================================================== */
+
+const ADMIN_UID =
+"rlUDXoyMRNcYYad6liiF9tq3M2t2";
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
+
+const START_NUMBER = 840001;
+
+const END_NUMBER = 842500;
+
+const TOTAL_GAMES = 2500;
+
+const FIRESTORE_BATCH_SIZE = 450;
+
+
+/* =====================================================
+   CONTROL
+===================================================== */
+
+let stopFlag = false;
+
+let generating = false;
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+document.getElementById("firebaseStatus").innerHTML =
+`
+<span class="ok">
+Firebase connected<br>
+Project: bangaram-34c98
+</span>
+`;
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+window.adminLogin = async function(){
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    const status =
+        document.getElementById("loginStatus");
+
+
+    if(!email || !password){
+
+        status.innerHTML =
+        `<span class="err">Enter email and password.</span>`;
+
+        return;
+    }
+
+
+    status.innerHTML = "Logging in...";
+
+
+    try{
+
+        const result =
+        await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+
+
+        if(result.user.uid !== ADMIN_UID){
+
+            await signOut(auth);
+
+            status.innerHTML =
+            `<span class="err">
+            This account is not the admin account.
+            </span>`;
+
+            return;
+        }
+
+
+        status.innerHTML =
+        `<span class="ok">Admin login successful.</span>`;
+
+    }
+    catch(error){
+
+        status.innerHTML =
+        `<span class="err">
+        ${error.message}
+        </span>`;
+    }
+
+};
+
+
+/* =====================================================
+   AUTH STATE
+===================================================== */
+
+onAuthStateChanged(auth, async (user)=>{
+
+    if(user && user.uid === ADMIN_UID){
+
+        document.getElementById("loginArea")
+        .style.display="none";
+
+        document.getElementById("generatorArea")
+        .style.display="block";
+
+        await loadSavedCount();
+
+    }
+    else{
+
+        document.getElementById("loginArea")
+        .style.display="block";
+
+        document.getElementById("generatorArea")
+        .style.display="none";
+    }
+
+});
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+window.logoutAdmin = async function(){
+
+    await signOut(auth);
+
+};
+
+
+/* =====================================================
+   SHUFFLE
+===================================================== */
+
+function shuffle(array){
+
+    const a = [...array];
+
+    for(let i=a.length-1;i>0;i--){
+
+        const j =
+        Math.floor(Math.random()*(i+1));
+
+        [a[i],a[j]] =
+        [a[j],a[i]];
+    }
+
+    return a;
+}
+
+
+/* =====================================================
+   CREATE 4x4 MAGIC SQUARE
+   STANDARD 4x4 NORMAL MAGIC SQUARE
+   NUMBERS 1-16
+===================================================== */
+
+function createMagicSquare(){
+
+    const base = [
+
+        [1,15,4,14],
+
+        [12,6,9,7],
+
+        [13,3,16,2],
+
+        [8,10,5,11]
+
+    ];
+
+
+    const flat = base.flat();
+
+
+    /*
+       Randomly permute rows/columns
+       while preserving magic property.
+    */
+
+    let rows = [0,1,2,3];
+
+    let cols = [0,1,2,3];
+
+
+    rows = shuffle(rows);
+
+    cols = shuffle(cols);
+
+
+    let square =
+    rows.map(r =>
+        cols.map(c =>
+            base[r][c]
+        )
+    );
+
+
+    /*
+       Random transpose
+    */
+
+    if(Math.random() < 0.5){
+
+        square =
+        square[0].map((_,c)=>
+            square.map(row=>row[c])
+        );
+    }
+
+
+    /*
+       Random rotations
+    */
+
+    const rotations =
+    Math.floor(Math.random()*4);
+
+
+    for(let r=0;r<rotations;r++){
+
+        square = rotateSquare(square);
+    }
+
+
+    return square;
+}
+
+
+/* =====================================================
+   ROTATE
+===================================================== */
+
+function rotateSquare(square){
+
+    return square[0].map(
+        (_,index)=>
+        square.map(row=>row[index]).reverse()
+    );
+}
+
+
+/* =====================================================
+   FLATTEN
+===================================================== */
+
+function flattenSquare(square){
+
+    return square.flat();
+}
+
+
+/* =====================================================
+   CHECK UNIQUE
+===================================================== */
+
+function isUniqueGame(square, existing){
+
+    const key =
+        flattenSquare(square).join(",");
+
+    return !existing.has(key);
+}
+
+
+/* =====================================================
+   GAME ID
+===================================================== */
+
+function makeGameId(number){
+
+    return "MKND" +
+        String(number).padStart(6,"0");
+}
+
+
+/* =====================================================
+   GENERATE
+===================================================== */
+
+window.generateGames = async function(){
+
+    if(generating){
+        return;
+    }
+
+
+    const user = auth.currentUser;
+
+
+    if(!user || user.uid !== ADMIN_UID){
+
+        alert("Admin login required.");
+
+        return;
+    }
+
+
+    generating = true;
+
+    stopFlag = false;
+
+
+    const generateButton =
+        document.getElementById("generateButton");
+
+    const stopButton =
+        document.getElementById("stopButton");
+
+
+    generateButton.disabled = true;
+
+    stopButton.disabled = false;
+
+
+    const status =
+        document.getElementById("generationStatus");
+
+    const progress =
+        document.getElementById("progressBar");
+
+
+    status.innerHTML =
+    `<span class="warn">Preparing games...</span>`;
+
+
+    try{
+
+        /*
+           Read existing games first.
+        */
+
+        const snapshot =
+        await getDocs(collection(db,"games"));
+
+
+        const existing =
+        new Set();
+
+
+        snapshot.forEach(docSnap=>{
+
+            const data = docSnap.data();
+
+
+            if(Array.isArray(data.numbers)){
+
+                existing.add(
+                    data.numbers.join(",")
+                );
+            }
+
+        });
+
+
+        let saved = 0;
+
+        let batch =
+        writeBatch(db);
+
+        let batchCount = 0;
+
+
+        for(let number=START_NUMBER;
+            number<=END_NUMBER;
+            number++){
+
+            if(stopFlag){
+
+                status.innerHTML =
+                `<span class="warn">
+                Generation stopped.
+                Saved: ${saved}
+                </span>`;
+
+                break;
+            }
+
+
+            const gameId =
+                makeGameId(number);
+
+
+            /*
+               Check whether Game ID already exists.
+            */
+
+            const gameRef =
+                doc(db,"games",gameId);
+
+
+            /*
+               Create unique magic square.
+            */
+
+            let square;
+
+            let key;
+
+            let attempts=0;
+
+
+            do{
+
+                square =
+                    createMagicSquare();
+
+                key =
+                    flattenSquare(square).join(",");
+
+                attempts++;
+
+
+            }while(
+                existing.has(key) &&
+                attempts < 100
+            );
+
+
+            /*
+               Skip duplicate.
+            */
+
+            if(existing.has(key)){
+
+                continue;
+            }
+
+
+            existing.add(key);
+
+
+            /*
+               Calculate totals.
+            */
+
+            const rowTotals =
+                square.map(row=>
+                    row.reduce(
+                        (a,b)=>a+b,0
+                    )
+                );
+
+
+            const columnTotals =
+                [0,1,2,3].map(c=>
+                    square.reduce(
+                        (sum,row)=>
+                        sum+row[c],0
+                    )
+                );
+
+
+            const diagonal1 =
+                square[0][0] +
+                square[1][1] +
+                square[2][2] +
+                square[3][3];
+
+
+            const diagonal2 =
+                square[0][3] +
+                square[1][2] +
+                square[2][1] +
+                square[3][0];
+
+
+            /*
+               Firestore data.
+            */
+
+            batch.set(gameRef,{
+
+                gameId:gameId,
+
+                grid:square,
+
+                numbers:flattenSquare(square),
+
+                rowTotals:rowTotals,
+
+                columnTotals:columnTotals,
+
+                diagonal1:diagonal1,
+
+                diagonal2:diagonal2,
+
+                magicTotal:rowTotals[0],
+
+                createdAt:new Date(),
+
+                status:"active"
+
+            });
+
+
+            batchCount++;
+
+            saved++;
+
+
+            /*
+               Batch save.
+            */
+
+            if(batchCount >= FIRESTORE_BATCH_SIZE){
+
+                await batch.commit();
+
+                batch =
+                    writeBatch(db);
+
+                batchCount=0;
+            }
+
+
+            /*
+               Preview.
+            */
+
+            showLastGame(
+                gameId,
+                square,
+                rowTotals[0]
+            );
+
+
+            /*
+               Progress.
+            */
+
+            const percent =
+                Math.round(
+                    (saved/TOTAL_GAMES)*100
+                );
+
+
+            progress.style.width =
+                percent+"%";
+
+
+            status.innerHTML =
+            `
+            <span class="ok">
+            Generating...<br>
+            Game: ${gameId}<br>
+            Saved: ${saved} / ${TOTAL_GAMES}<br>
+            Progress: ${percent}%
+            </span>
+            `;
+
+
+            /*
+               Allow browser UI to update.
+            */
+
+            await new Promise(
+                resolve =>
+                setTimeout(resolve,5)
+            );
+
+        }
+
+
+        /*
+           Commit remaining batch.
+        */
+
+        if(batchCount > 0 && !stopFlag){
+
+            await batch.commit();
+        }
+
+
+        if(!stopFlag){
+
+            progress.style.width="100%";
+
+            status.innerHTML =
+            `
+            <span class="ok">
+            ALL GAMES SAVED SUCCESSFULLY<br>
+            Total: ${saved}
+            </span>
+            `;
+
+        }
+
+
+        await loadSavedCount();
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        status.innerHTML =
+        `
+        <span class="err">
+        Error:<br>
+        ${error.message}
+        </span>
+        `;
+
+    }
+    finally{
+
+        generating=false;
+
+        generateButton.disabled=false;
+
+        stopButton.disabled=true;
+
+    }
+
+};
+
+
+/* =====================================================
+   STOP
+===================================================== */
+
+window.stopGeneration = function(){
+
+    if(!generating){
+        return;
+    }
+
+    stopFlag=true;
+
+    document.getElementById("stopButton")
+    .disabled=true;
+
+    document.getElementById("generationStatus")
+    .innerHTML =
+    `
+    <span class="warn">
+    Stopping after current operation...
+    </span>
+    `;
+
+};
+
+
+/* =====================================================
+   LAST GAME PREVIEW
+===================================================== */
+
+function showLastGame(
+    gameId,
+    square,
+    total
+){
+
+    let html =
+    `
+    <div>
+    <b class="ok">${gameId}</b><br>
+    Magic Total: <b>${total}</b>
+    </div>
+    `;
+
+
+    html +=
+    `<div class="gamePreview">`;
+
+
+    square.forEach(row=>{
+
+        row.forEach(number=>{
+
+            html +=
+            `<div class="box">${number}</div>`;
+
+        });
+
+    });
+
+
+    html += `</div>`;
+
+
+    document.getElementById("lastGame")
+    .innerHTML=html;
+}
+
+
+/* =====================================================
+   SAVED COUNT
+===================================================== */
+
+async function loadSavedCount(){
+
+    try{
+
+        const snapshot =
+        await getDocs(
+            collection(db,"games")
+        );
+
+
+        let count =
+            snapshot.size;
+
+
+        document.getElementById("savedInfo")
+        .innerHTML =
+        `
+        <span class="ok">
+        Games saved in Firebase:
+        <b>${count}</b>
+        </span>
+        `;
+
+    }
+    catch(error){
+
+        document.getElementById("savedInfo")
+        .innerHTML =
+        `
+        <span class="err">
+        Cannot read Firestore:<br>
+        ${error.message}
+        </span>
+        `;
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

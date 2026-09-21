@@ -8,7 +8,7 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
-<title>GAME-GENERATOR</title>
+<title>GAME-GENERATOR-50</title>
 
 <style>
 
@@ -122,6 +122,11 @@ button {
     text-align: center;
 }
 
+.info {
+    color: #93c5fd;
+    line-height: 1.6;
+}
+
 </style>
 
 </head>
@@ -132,6 +137,12 @@ button {
 <div class="container">
 
 <h1>GAME-GENERATOR</h1>
+
+<div id="version"
+     class="status"
+     style="text-align:center;">
+    VERSION 50 TEST - NEW CODE
+</div>
 
 
 <!-- LOGIN -->
@@ -168,7 +179,6 @@ LOGIN
 </div>
 
 
-
 <!-- ADMIN PANEL -->
 
 <div
@@ -180,30 +190,26 @@ LOGIN
 
 <h2>GAME GENERATOR</h2>
 
-<p>
-Game IDs:
+<p class="info">
+Game IDs:<br>
 <b>MKND840001 - MKND840050</b>
 </p>
 
-<p>
-Numbers:
-<b>1 - 25</b>
+<p class="info">
+Numbers: <b>1 - 25</b>
 </p>
 
-<p>
-Grid:
-<b>4 × 4</b>
+<p class="info">
+Grid: <b>4 × 4</b>
 </p>
 
-<p>
-Rule:
-<b>Row Total = Column Total</b>
+<p class="info">
+Rule: <b>All Rows = All Columns</b>
 </p>
 
-<p>
-<b>Diagonal checking is OFF</b>
+<p class="info">
+Diagonal checking: <b>OFF</b>
 </p>
-
 
 <button
     class="generateBtn"
@@ -212,14 +218,12 @@ Rule:
 GENERATE & SAVE 50 GAMES
 </button>
 
-
 <button
     class="stopBtn"
     onclick="stopGeneration()"
 >
 STOP
 </button>
-
 
 <button
     class="logoutBtn"
@@ -228,16 +232,14 @@ STOP
 LOGOUT
 </button>
 
-
 <div
     id="status"
     class="status"
 >
-Ready.
+Admin connected.
 </div>
 
 </div>
-
 
 
 <!-- PREVIEW -->
@@ -253,13 +255,11 @@ Ready.
 >
 </div>
 
-
 <div
     id="grid"
     class="grid"
 >
 </div>
-
 
 <div
     id="rowTotal"
@@ -267,20 +267,17 @@ Ready.
 >
 </div>
 
-
 <div
     id="columnTotal"
     class="total"
 >
 </div>
 
-
 </div>
 
 </div>
 
 </div>
-
 
 
 <script type="module">
@@ -310,13 +307,11 @@ from
 import {
     getFirestore,
     doc,
-    getDoc,
     writeBatch,
     serverTimestamp
 }
 from
 "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
 
 
 /* =========================================
@@ -346,7 +341,6 @@ const firebaseConfig = {
 };
 
 
-
 /* =========================================
    FIREBASE START
 ========================================= */
@@ -354,14 +348,11 @@ const firebaseConfig = {
 const app =
 initializeApp(firebaseConfig);
 
-
 const auth =
 getAuth(app);
 
-
 const db =
 getFirestore(app);
-
 
 
 /* =========================================
@@ -372,13 +363,11 @@ const ADMIN_UID =
 "rlUDXoyMRNcYYad6liiF9tq3M2t2";
 
 
-
 /* =========================================
    CONTROL
 ========================================= */
 
 let stopRequested = false;
-
 
 
 /* =========================================
@@ -393,12 +382,10 @@ window.adminLogin = async function() {
     .value
     .trim();
 
-
     const password =
     document
     .getElementById("password")
     .value;
-
 
     const status =
     document
@@ -459,7 +446,6 @@ window.adminLogin = async function() {
 };
 
 
-
 /* =========================================
    AUTH STATE
 ========================================= */
@@ -472,10 +458,13 @@ onAuthStateChanged(
         document
         .getElementById("loginCard");
 
-
         const adminPanel =
         document
         .getElementById("adminPanel");
+
+        const status =
+        document
+        .getElementById("status");
 
 
         if (
@@ -487,16 +476,12 @@ onAuthStateChanged(
             .classList
             .add("hidden");
 
-
             adminPanel
             .classList
             .remove("hidden");
 
-
-            document
-            .getElementById("status")
-            .innerText =
-            "Admin connected.";
+            status.innerText =
+            "Admin connected to Firebase.";
 
         }
 
@@ -506,7 +491,6 @@ onAuthStateChanged(
             .classList
             .remove("hidden");
 
-
             adminPanel
             .classList
             .add("hidden");
@@ -515,7 +499,6 @@ onAuthStateChanged(
 
     }
 );
-
 
 
 /* =========================================
@@ -529,11 +512,8 @@ window.logout = async function() {
 };
 
 
-
 /* =========================================
    BASE 4 × 4 MAGIC SQUARE
-   NUMBERS 1 - 16
-   TOTAL = 34
 ========================================= */
 
 const baseSquare = [
@@ -549,23 +529,17 @@ const baseSquare = [
 ];
 
 
-
 /* =========================================
-   ROTATE SQUARE
+   ROTATE 90°
 ========================================= */
 
 function rotateSquare(square) {
 
     const result = [
-
-        [0, 0, 0, 0],
-
-        [0, 0, 0, 0],
-
-        [0, 0, 0, 0],
-
-        [0, 0, 0, 0]
-
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0]
     ];
 
 
@@ -581,18 +555,16 @@ function rotateSquare(square) {
             c++
         ) {
 
-            result[c][3 - r] =
+            result[c][3-r] =
             square[r][c];
 
         }
 
     }
 
-
     return result;
 
 }
-
 
 
 /* =========================================
@@ -602,15 +574,10 @@ function rotateSquare(square) {
 function flipSquare(square) {
 
     const result = [
-
-        [0, 0, 0, 0],
-
-        [0, 0, 0, 0],
-
-        [0, 0, 0, 0],
-
-        [0, 0, 0, 0]
-
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0]
     ];
 
 
@@ -626,65 +593,66 @@ function flipSquare(square) {
             c++
         ) {
 
-            result[r][3 - c] =
+            result[r][3-c] =
             square[r][c];
 
         }
 
     }
 
-
     return result;
 
 }
 
 
-
 /* =========================================
    CREATE UNIQUE GAME
-   VALUES 1 - 25
 ========================================= */
 
 function createGame(gameNumber) {
 
     /*
-       There are 10 possible shifts.
+       56 possible combinations:
 
-       Shift 0:
-       1 - 16
+       7 shifts × 8 orientations
 
-       Shift 1:
-       2 - 17
+       We use first 50.
 
+       Shift:
+       0 → numbers 1-16
+       1 → numbers 2-17
        ...
+       6 → numbers 7-22
 
-       Shift 9:
-       10 - 25
+       Therefore every number stays
+       inside 1-25.
     */
 
-
     const shift =
-    Math.floor(gameNumber / 8) % 10;
+    Math.floor(gameNumber / 8);
+
+
+    const orientation =
+    gameNumber % 8;
 
 
     let square =
     baseSquare.map(
-        row => row.map(
-            value => value + shift
+        row =>
+        row.map(
+            value =>
+            value + shift
         )
     );
 
 
     /*
-       Different orientation
-       for every game.
+       8 different orientations.
     */
 
-    const rotation =
-    gameNumber % 8;
-
-
-    if (rotation >= 4) {
+    if (
+        orientation >= 4
+    ) {
 
         square =
         flipSquare(square);
@@ -693,7 +661,7 @@ function createGame(gameNumber) {
 
 
     const rotations =
-    rotation % 4;
+    orientation % 4;
 
 
     for (
@@ -713,80 +681,24 @@ function createGame(gameNumber) {
 }
 
 
-
 /* =========================================
-   CHECK ROW/COLUMN
-   NO DIAGONAL CHECK
+   VALIDATE GAME
+   NO DIAGONALS
 ========================================= */
 
 function validateGame(square) {
 
-    const target =
-    square[0][0] +
-    square[0][1] +
-    square[0][2] +
-    square[0][3];
-
-
     /*
-       ROW CHECK
-    */
-
-    for (
-        let r = 0;
-        r < 4;
-        r++
-    ) {
-
-        const total =
-        square[r][0] +
-        square[r][1] +
-        square[r][2] +
-        square[r][3];
-
-
-        if (total !== target) {
-
-            return false;
-
-        }
-
-    }
-
-
-    /*
-       COLUMN CHECK
-    */
-
-    for (
-        let c = 0;
-        c < 4;
-        c++
-    ) {
-
-        const total =
-        square[0][c] +
-        square[1][c] +
-        square[2][c] +
-        square[3][c];
-
-
-        if (total !== target) {
-
-            return false;
-
-        }
-
-    }
-
-
-    /*
-       UNIQUE CHECK
+       16 numbers
     */
 
     const numbers =
     square.flat();
 
+
+    /*
+       Exactly 16 unique numbers
+    */
 
     const unique =
     new Set(numbers);
@@ -802,7 +714,7 @@ function validateGame(square) {
 
 
     /*
-       RANGE CHECK
+       Numbers must be 1-25
     */
 
     for (
@@ -821,10 +733,81 @@ function validateGame(square) {
     }
 
 
+    /*
+       Target = first row
+    */
+
+    const target =
+    square[0][0] +
+    square[0][1] +
+    square[0][2] +
+    square[0][3];
+
+
+    /*
+       All rows
+    */
+
+    for (
+        let r = 0;
+        r < 4;
+        r++
+    ) {
+
+        const rowTotal =
+        square[r][0] +
+        square[r][1] +
+        square[r][2] +
+        square[r][3];
+
+
+        if (
+            rowTotal !== target
+        ) {
+
+            return false;
+
+        }
+
+    }
+
+
+    /*
+       All columns
+    */
+
+    for (
+        let c = 0;
+        c < 4;
+        c++
+    ) {
+
+        const columnTotal =
+        square[0][c] +
+        square[1][c] +
+        square[2][c] +
+        square[3][c];
+
+
+        if (
+            columnTotal !== target
+        ) {
+
+            return false;
+
+        }
+
+    }
+
+
+    /*
+       IMPORTANT:
+       No diagonal check.
+    */
+
     return true;
 
 }
-
 
 
 /* =========================================
@@ -840,7 +823,6 @@ function showPreview(
     document
     .getElementById("previewCard");
 
-
     const grid =
     document
     .getElementById("grid");
@@ -854,11 +836,6 @@ function showPreview(
 
     grid.innerHTML = "";
 
-
-    /*
-       UI can use arrays.
-       They are NOT sent to Firestore.
-    */
 
     for (
         let r = 0;
@@ -892,7 +869,7 @@ function showPreview(
     }
 
 
-    const target =
+    const total =
     square[0][0] +
     square[0][1] +
     square[0][2] +
@@ -902,13 +879,13 @@ function showPreview(
     document
     .getElementById("rowTotal")
     .innerText =
-    "ROW TOTAL: " + target;
+    "ROW TOTAL: " + total;
 
 
     document
     .getElementById("columnTotal")
     .innerText =
-    "COLUMN TOTAL: " + target;
+    "COLUMN TOTAL: " + total;
 
 
     card
@@ -918,24 +895,15 @@ function showPreview(
 }
 
 
-
 /* =========================================
-   CREATE FIRESTORE DATA
+   FIRESTORE DATA
+   NO ARRAYS
 ========================================= */
 
 function createFirestoreData(
     gameId,
     square
 ) {
-
-    /*
-       IMPORTANT:
-
-       NO ARRAY IS RETURNED HERE.
-
-       Only individual numbers.
-    */
-
 
     const n1 =
     Number(square[0][0]);
@@ -994,7 +962,10 @@ function createFirestoreData(
 
 
     /*
-       THIS OBJECT HAS NO ARRAYS.
+       ONLY SIMPLE FIELDS.
+       NO ARRAY.
+       NO GRID ARRAY.
+       NO NUMBERS ARRAY.
     */
 
     return {
@@ -1041,7 +1012,6 @@ function createFirestoreData(
 }
 
 
-
 /* =========================================
    GENERATE 50 GAMES
 ========================================= */
@@ -1049,6 +1019,9 @@ function createFirestoreData(
 window.generateGames =
 async function() {
 
+    /*
+       ADMIN CHECK
+    */
 
     if (
         !auth.currentUser
@@ -1086,24 +1059,26 @@ async function() {
 
 
     status.innerText =
-    "Starting...";
+    "GENERATING 50 GAMES...";
 
 
     /*
-       One batch.
-       Only 50 documents.
+       One Firestore batch.
+
+       IMPORTANT:
+       NO getDoc()
+       NO existing-game read.
     */
 
-    let batch =
+    const batch =
     writeBatch(db);
-
-
-    let saved =
-    0;
 
 
     try {
 
+        /*
+           Generate exactly 50.
+        */
 
         for (
             let i = 0;
@@ -1111,13 +1086,12 @@ async function() {
             i++
         ) {
 
-
             if (
                 stopRequested
             ) {
 
                 status.innerText =
-                "Stopped.";
+                "Generation stopped.";
 
                 return;
 
@@ -1132,38 +1106,6 @@ async function() {
 
 
             /*
-               Check whether
-               this ID already exists.
-            */
-
-            const gameRef =
-            doc(
-                db,
-                "games",
-                gameId
-            );
-
-
-            const existing =
-            await getDoc(
-                gameRef
-            );
-
-
-            if (
-                existing.exists()
-            ) {
-
-                status.innerText =
-                gameId +
-                " already exists. Skipped.";
-
-                continue;
-
-            }
-
-
-            /*
                Create game.
             */
 
@@ -1172,24 +1114,23 @@ async function() {
 
 
             /*
-               Validate.
+               Validate game.
             */
 
             if (
                 !validateGame(square)
             ) {
 
-                status.innerText =
-                "Game validation failed: " +
-                gameId;
-
-                return;
+                throw new Error(
+                    "Game validation failed: " +
+                    gameId
+                );
 
             }
 
 
             /*
-               Show it.
+               Preview latest game.
             */
 
             showPreview(
@@ -1199,8 +1140,7 @@ async function() {
 
 
             /*
-               Create ONLY scalar
-               Firestore fields.
+               Firestore scalar data.
             */
 
             const data =
@@ -1211,9 +1151,21 @@ async function() {
 
 
             /*
-               Save.
+               Document reference.
+            */
 
-               NO nested arrays.
+            const gameRef =
+            doc(
+                db,
+                "games",
+                gameId
+            );
+
+
+            /*
+               SAVE TO BATCH.
+
+               No arrays.
             */
 
             batch.set(
@@ -1222,12 +1174,9 @@ async function() {
             );
 
 
-            saved++;
-
-
             status.innerText =
-            "Prepared " +
-            saved +
+            "Generated " +
+            (i + 1) +
             " / 50 : " +
             gameId;
 
@@ -1235,36 +1184,46 @@ async function() {
 
 
         /*
-           Commit all 50.
+           STOP CHECK
         */
 
         if (
-            saved > 0
+            stopRequested
         ) {
 
             status.innerText =
-            "Saving " +
-            saved +
-            " games to Firebase...";
+            "Generation stopped.";
 
-
-            await batch.commit();
+            return;
 
         }
 
 
+        /*
+           SAVE ALL 50
+        */
+
         status.innerText =
-        "SUCCESS: " +
-        saved +
-        " games saved to Firestore.";
+        "Saving 50 games to Firebase...";
+
+
+        await batch.commit();
+
+
+        /*
+           SUCCESS
+        */
+
+        status.innerText =
+        "SUCCESS: 50 games saved to Firebase.";
+
 
         alert(
-            saved +
-            " games saved successfully."
+            "SUCCESS!\n\n" +
+            "50 games saved to Firestore."
         );
 
     }
-
 
     catch(error) {
 
@@ -1289,7 +1248,6 @@ async function() {
 };
 
 
-
 /* =========================================
    STOP
 ========================================= */
@@ -1307,7 +1265,6 @@ function() {
     "Stopping...";
 
 };
-
 
 </script>
 

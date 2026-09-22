@@ -1,298 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>GAME-GENERATOR-50</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAME-GENERATOR</title>
 
 <style>
-
-* {
-    box-sizing: border-box;
+*{box-sizing:border-box}
+body{
+    margin:0;padding:15px;background:#101522;
+    color:white;font-family:Arial,sans-serif
 }
-
-body {
-    margin: 0;
-    padding: 15px;
-    background: #101522;
-    color: white;
-    font-family: Arial, sans-serif;
+.container{max-width:520px;margin:auto}
+h1,h2{text-align:center}
+.card{
+    background:#1b2333;padding:18px;
+    border-radius:12px;margin-bottom:15px
 }
-
-.container {
-    max-width: 520px;
-    margin: auto;
+input,button,select{
+    width:100%;padding:13px;margin-top:10px;
+    border:0;border-radius:8px;font-size:16px
 }
-
-h1 {
-    text-align: center;
+button{font-weight:bold;cursor:pointer}
+input,select{background:white;color:black}
+.loginBtn{background:#22c55e;color:white}
+.generateBtn{background:#2563eb;color:white}
+.viewBtn{background:#0891b2;color:white}
+.stopBtn{background:#dc2626;color:white}
+.logoutBtn{background:#7f1d1d;color:white}
+.status{
+    margin-top:15px;padding:12px;background:#111827;
+    border-radius:8px;word-break:break-word
 }
-
-.card {
-    background: #1b2333;
-    padding: 18px;
-    border-radius: 12px;
-    margin-bottom: 15px;
+.hidden{display:none}
+.grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:6px
 }
-
-input,
-button {
-    width: 100%;
-    padding: 13px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
+.cell{
+    background:#334155;padding:16px 5px;
+    text-align:center;border-radius:6px;
+    font-size:20px;font-weight:bold
 }
-
-input {
-    background: white;
-    color: black;
+.total{
+    margin-top:10px;padding:10px;background:#0f172a;
+    border-radius:6px;text-align:center
 }
-
-button {
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.loginBtn {
-    background: #22c55e;
-    color: white;
-}
-
-.generateBtn {
-    background: #2563eb;
-    color: white;
-}
-
-.stopBtn {
-    background: #dc2626;
-    color: white;
-}
-
-.logoutBtn {
-    background: #7f1d1d;
-    color: white;
-}
-
-.status {
-    margin-top: 15px;
-    padding: 12px;
-    background: #111827;
-    border-radius: 8px;
-    word-break: break-word;
-}
-
-.hidden {
-    display: none;
-}
-
-.gameId {
-    text-align: center;
-    font-size: 21px;
-    font-weight: bold;
-    margin-bottom: 15px;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
-}
-
-.cell {
-    background: #334155;
-    padding: 16px 5px;
-    text-align: center;
-    border-radius: 6px;
-    font-size: 19px;
-    font-weight: bold;
-}
-
-.total {
-    margin-top: 10px;
-    padding: 10px;
-    background: #0f172a;
-    border-radius: 6px;
-    text-align: center;
-}
-
-.info {
-    color: #93c5fd;
-    line-height: 1.6;
-}
-
+.gameId{text-align:center;font-size:21px;font-weight:bold;margin:12px}
+.info{line-height:1.6;color:#bfdbfe}
 </style>
-
 </head>
 
-
 <body>
-
 <div class="container">
 
 <h1>GAME-GENERATOR</h1>
-
-<div id="version"
-     class="status"
-     style="text-align:center;">
-    VERSION 50 TEST - NEW CODE
+<div class="status" style="text-align:center">
+    VERSION 50 TEST - VIEW SAVED GAMES
 </div>
 
-
-<!-- LOGIN -->
-
+<!-- ADMIN LOGIN -->
 <div id="loginCard" class="card">
-
-<h2>ADMIN LOGIN</h2>
-
-<input
-    type="email"
-    id="email"
-    placeholder="Admin Email"
->
-
-<input
-    type="password"
-    id="password"
-    placeholder="Password"
->
-
-<button
-    class="loginBtn"
-    onclick="adminLogin()"
->
-LOGIN
-</button>
-
-<div
-    id="loginStatus"
-    class="status"
->
+    <h2>ADMIN LOGIN</h2>
+    <input type="email" id="email" placeholder="Admin Email">
+    <input type="password" id="password" placeholder="Password">
+    <button class="loginBtn" onclick="adminLogin()">LOGIN</button>
+    <div id="loginStatus" class="status"></div>
 </div>
-
-</div>
-
 
 <!-- ADMIN PANEL -->
+<div id="adminPanel" class="hidden">
 
-<div
-    id="adminPanel"
-    class="hidden"
->
+    <div class="card">
+        <h2>GAME GENERATOR</h2>
 
-<div class="card">
+        <p class="info">
+            Game IDs: <b>MKND840001 - MKND840050</b><br>
+            Numbers: <b>1 - 25</b><br>
+            Grid: <b>4 × 4</b><br>
+            All row totals = all column totals<br>
+            Diagonal checking: <b>OFF</b>
+        </p>
 
-<h2>GAME GENERATOR</h2>
+        <button class="generateBtn" onclick="generateGames()">
+            GENERATE & SAVE 50 GAMES
+        </button>
 
-<p class="info">
-Game IDs:<br>
-<b>MKND840001 - MKND840050</b>
-</p>
+        <button class="stopBtn" onclick="stopGeneration()">
+            STOP
+        </button>
 
-<p class="info">
-Numbers: <b>1 - 25</b>
-</p>
+        <hr style="margin-top:20px">
 
-<p class="info">
-Grid: <b>4 × 4</b>
-</p>
+        <h2>VIEW SAVED GAMES</h2>
 
-<p class="info">
-Rule: <b>All Rows = All Columns</b>
-</p>
+        <button class="viewBtn" onclick="loadSavedGames()">
+            LOAD SAVED GAMES
+        </button>
 
-<p class="info">
-Diagonal checking: <b>OFF</b>
-</p>
+        <select id="savedGameSelect">
+            <option value="">Select Game ID</option>
+        </select>
 
-<button
-    class="generateBtn"
-    onclick="generateGames()"
->
-GENERATE & SAVE 50 GAMES
-</button>
+        <button class="loginBtn" onclick="viewSelectedGame()">
+            VIEW SELECTED GAME
+        </button>
 
-<button
-    class="stopBtn"
-    onclick="stopGeneration()"
->
-STOP
-</button>
+        <button class="logoutBtn" onclick="logout()">
+            LOGOUT
+        </button>
 
-<button
-    class="logoutBtn"
-    onclick="logout()"
->
-LOGOUT
-</button>
+        <div id="status" class="status">Admin connected.</div>
+    </div>
 
-<div
-    id="status"
-    class="status"
->
-Admin connected.
-</div>
+    <!-- PREVIEW -->
+    <div id="previewCard" class="card hidden">
+        <div id="previewGameId" class="gameId"></div>
+        <div id="grid" class="grid"></div>
+        <div id="rowTotal" class="total"></div>
+        <div id="columnTotal" class="total"></div>
+    </div>
 
 </div>
-
-
-<!-- PREVIEW -->
-
-<div
-    id="previewCard"
-    class="card hidden"
->
-
-<div
-    id="previewGameId"
-    class="gameId"
->
 </div>
-
-<div
-    id="grid"
-    class="grid"
->
-</div>
-
-<div
-    id="rowTotal"
-    class="total"
->
-</div>
-
-<div
-    id="columnTotal"
-    class="total"
->
-</div>
-
-</div>
-
-</div>
-
-</div>
-
 
 <script type="module">
 
-
-/* =========================================
-   FIREBASE IMPORTS
-========================================= */
-
-import {
-    initializeApp
-}
-from
-"https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-
+/* FIREBASE IMPORTS */
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
     getAuth,
@@ -300,973 +135,415 @@ import {
     onAuthStateChanged,
     signOut
 }
-from
-"https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 import {
     getFirestore,
     doc,
     writeBatch,
-    serverTimestamp
+    serverTimestamp,
+    collection,
+    getDocs
 }
-from
-"https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 
-/* =========================================
-   FIREBASE CONFIG
-========================================= */
-
+/* FIREBASE CONFIG */
 const firebaseConfig = {
-
-    apiKey:
-    "AIzaSyD2ZItFk5xcqFUCLMehkoWtK88hjujkMuc",
-
-    authDomain:
-    "bangaram-34c98.firebaseapp.com",
-
-    projectId:
-    "bangaram-34c98",
-
-    storageBucket:
-    "bangaram-34c98.firebasestorage.app",
-
-    messagingSenderId:
-    "382943394283",
-
-    appId:
-    "1:382943394283:web:bf11bb5597dfd2782881ae"
-
+    apiKey: "AIzaSyD2ZItFk5xcqFUCLMehkoWtK88hjujkMuc",
+    authDomain: "bangaram-34c98.firebaseapp.com",
+    projectId: "bangaram-34c98",
+    storageBucket: "bangaram-34c98.firebasestorage.app",
+    messagingSenderId: "382943394283",
+    appId: "1:382943394283:web:bf11bb5597dfd2782881ae"
 };
 
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-/* =========================================
-   FIREBASE START
-========================================= */
-
-const app =
-initializeApp(firebaseConfig);
-
-const auth =
-getAuth(app);
-
-const db =
-getFirestore(app);
-
-
-/* =========================================
-   ADMIN UID
-========================================= */
-
-const ADMIN_UID =
-"rlUDXoyMRNcYYad6liiF9tq3M2t2";
-
-
-/* =========================================
-   CONTROL
-========================================= */
+const ADMIN_UID = "rlUDXoyMRNcYYad6liiF9tq3M2t2";
 
 let stopRequested = false;
+let generationRunning = false;
+let savedGames = {};
 
 
-/* =========================================
-   ADMIN LOGIN
-========================================= */
-
+/* ADMIN LOGIN */
 window.adminLogin = async function() {
 
-    const email =
-    document
-    .getElementById("email")
-    .value
-    .trim();
-
-    const password =
-    document
-    .getElementById("password")
-    .value;
-
-    const status =
-    document
-    .getElementById("loginStatus");
-
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const status = document.getElementById("loginStatus");
 
     if (!email || !password) {
-
-        status.innerText =
-        "Enter email and password.";
-
+        status.innerText = "Enter email and password.";
         return;
     }
 
-
-    status.innerText =
-    "Logging in...";
-
+    status.innerText = "Logging in...";
 
     try {
-
-        const result =
-        await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
+        const result = await signInWithEmailAndPassword(
+            auth, email, password
         );
 
-
-        if (
-            result.user.uid !== ADMIN_UID
-        ) {
-
+        if (result.user.uid !== ADMIN_UID) {
             await signOut(auth);
-
-            status.innerText =
-            "Access denied. Admin only.";
-
+            status.innerText = "Access denied. Admin only.";
             return;
         }
 
+        status.innerText = "Admin login successful.";
 
-        status.innerText =
-        "Admin login successful.";
-
-    }
-
-    catch(error) {
-
+    } catch(error) {
         console.error(error);
-
-        status.innerText =
-        "Login error: " +
-        error.message;
-
+        status.innerText = "Login error: " + error.message;
     }
-
 };
 
 
-/* =========================================
-   AUTH STATE
-========================================= */
+/* AUTH STATE */
+onAuthStateChanged(auth, function(user) {
 
-onAuthStateChanged(
-    auth,
-    function(user) {
+    const loginCard = document.getElementById("loginCard");
+    const adminPanel = document.getElementById("adminPanel");
 
-        const loginCard =
-        document
-        .getElementById("loginCard");
-
-        const adminPanel =
-        document
-        .getElementById("adminPanel");
-
-        const status =
-        document
-        .getElementById("status");
-
-
-        if (
-            user &&
-            user.uid === ADMIN_UID
-        ) {
-
-            loginCard
-            .classList
-            .add("hidden");
-
-            adminPanel
-            .classList
-            .remove("hidden");
-
-            status.innerText =
+    if (user && user.uid === ADMIN_UID) {
+        loginCard.classList.add("hidden");
+        adminPanel.classList.remove("hidden");
+        document.getElementById("status").innerText =
             "Admin connected to Firebase.";
-
-        }
-
-        else {
-
-            loginCard
-            .classList
-            .remove("hidden");
-
-            adminPanel
-            .classList
-            .add("hidden");
-
-        }
-
+    } else {
+        loginCard.classList.remove("hidden");
+        adminPanel.classList.add("hidden");
     }
-);
+});
 
 
-/* =========================================
-   LOGOUT
-========================================= */
-
+/* LOGOUT */
 window.logout = async function() {
-
     await signOut(auth);
-
 };
 
 
-/* =========================================
-   BASE 4 × 4 MAGIC SQUARE
-========================================= */
-
+/* BASE 4x4 MAGIC SQUARE */
 const baseSquare = [
-
     [16, 2, 3, 13],
-
     [5, 11, 10, 8],
-
     [9, 7, 6, 12],
-
     [4, 14, 15, 1]
-
 ];
 
 
-/* =========================================
-   ROTATE 90°
-========================================= */
-
+/* ROTATE SQUARE */
 function rotateSquare(square) {
-
     const result = [
-        [0,0,0,0],
-        [0,0,0,0],
-        [0,0,0,0],
-        [0,0,0,0]
+        [0,0,0,0],[0,0,0,0],
+        [0,0,0,0],[0,0,0,0]
     ];
 
-
-    for (
-        let r = 0;
-        r < 4;
-        r++
-    ) {
-
-        for (
-            let c = 0;
-            c < 4;
-            c++
-        ) {
-
-            result[c][3-r] =
-            square[r][c];
-
+    for (let r=0; r<4; r++) {
+        for (let c=0; c<4; c++) {
+            result[c][3-r] = square[r][c];
         }
-
     }
-
     return result;
-
 }
 
 
-/* =========================================
-   FLIP LEFT / RIGHT
-========================================= */
-
+/* FLIP SQUARE */
 function flipSquare(square) {
-
-    const result = [
-        [0,0,0,0],
-        [0,0,0,0],
-        [0,0,0,0],
-        [0,0,0,0]
-    ];
-
-
-    for (
-        let r = 0;
-        r < 4;
-        r++
-    ) {
-
-        for (
-            let c = 0;
-            c < 4;
-            c++
-        ) {
-
-            result[r][3-c] =
-            square[r][c];
-
-        }
-
-    }
-
-    return result;
-
+    return square.map(row => [...row].reverse());
 }
 
 
-/* =========================================
-   CREATE UNIQUE GAME
-========================================= */
-
+/* CREATE GAME */
 function createGame(gameNumber) {
 
-    /*
-       56 possible combinations:
+    // 7 shifts × 8 orientations = 56 possible layouts.
+    // This test uses 50 different layouts.
+    const shift = Math.floor(gameNumber / 8);
+    const orientation = gameNumber % 8;
 
-       7 shifts × 8 orientations
-
-       We use first 50.
-
-       Shift:
-       0 → numbers 1-16
-       1 → numbers 2-17
-       ...
-       6 → numbers 7-22
-
-       Therefore every number stays
-       inside 1-25.
-    */
-
-    const shift =
-    Math.floor(gameNumber / 8);
-
-
-    const orientation =
-    gameNumber % 8;
-
-
-    let square =
-    baseSquare.map(
-        row =>
-        row.map(
-            value =>
-            value + shift
-        )
+    let square = baseSquare.map(
+        row => row.map(value => value + shift)
     );
 
-
-    /*
-       8 different orientations.
-    */
-
-    if (
-        orientation >= 4
-    ) {
-
-        square =
-        flipSquare(square);
-
+    if (orientation >= 4) {
+        square = flipSquare(square);
     }
 
-
-    const rotations =
-    orientation % 4;
-
-
-    for (
-        let i = 0;
-        i < rotations;
-        i++
-    ) {
-
-        square =
-        rotateSquare(square);
-
+    for (let i=0; i<(orientation % 4); i++) {
+        square = rotateSquare(square);
     }
-
 
     return square;
-
 }
 
 
-/* =========================================
-   VALIDATE GAME
-   NO DIAGONALS
-========================================= */
-
+/* VALIDATE ROWS & COLUMNS ONLY */
 function validateGame(square) {
 
-    /*
-       16 numbers
-    */
+    const numbers = square.flat();
 
-    const numbers =
-    square.flat();
+    if (new Set(numbers).size !== 16) return false;
+    if (numbers.some(n => n < 1 || n > 25)) return false;
 
+    const target = square[0].reduce((a,b) => a+b, 0);
 
-    /*
-       Exactly 16 unique numbers
-    */
-
-    const unique =
-    new Set(numbers);
-
-
-    if (
-        unique.size !== 16
-    ) {
-
-        return false;
-
+    for (let r=0; r<4; r++) {
+        const total = square[r].reduce((a,b) => a+b, 0);
+        if (total !== target) return false;
     }
 
+    for (let c=0; c<4; c++) {
+        const total =
+            square[0][c] + square[1][c] +
+            square[2][c] + square[3][c];
 
-    /*
-       Numbers must be 1-25
-    */
-
-    for (
-        const n of numbers
-    ) {
-
-        if (
-            n < 1 ||
-            n > 25
-        ) {
-
-            return false;
-
-        }
-
+        if (total !== target) return false;
     }
 
-
-    /*
-       Target = first row
-    */
-
-    const target =
-    square[0][0] +
-    square[0][1] +
-    square[0][2] +
-    square[0][3];
-
-
-    /*
-       All rows
-    */
-
-    for (
-        let r = 0;
-        r < 4;
-        r++
-    ) {
-
-        const rowTotal =
-        square[r][0] +
-        square[r][1] +
-        square[r][2] +
-        square[r][3];
-
-
-        if (
-            rowTotal !== target
-        ) {
-
-            return false;
-
-        }
-
-    }
-
-
-    /*
-       All columns
-    */
-
-    for (
-        let c = 0;
-        c < 4;
-        c++
-    ) {
-
-        const columnTotal =
-        square[0][c] +
-        square[1][c] +
-        square[2][c] +
-        square[3][c];
-
-
-        if (
-            columnTotal !== target
-        ) {
-
-            return false;
-
-        }
-
-    }
-
-
-    /*
-       IMPORTANT:
-       No diagonal check.
-    */
-
+    // Diagonals intentionally not checked.
     return true;
-
 }
 
 
-/* =========================================
-   SHOW PREVIEW
-========================================= */
+/* PREVIEW */
+function showPreview(gameId, square) {
 
-function showPreview(
-    gameId,
-    square
-) {
+    document.getElementById("previewGameId").innerText = gameId;
 
-    const card =
-    document
-    .getElementById("previewCard");
-
-    const grid =
-    document
-    .getElementById("grid");
-
-
-    document
-    .getElementById("previewGameId")
-    .innerText =
-    gameId;
-
-
+    const grid = document.getElementById("grid");
     grid.innerHTML = "";
 
+    square.flat().forEach(number => {
+        const cell = document.createElement("div");
+        cell.className = "cell";
+        cell.innerText = number;
+        grid.appendChild(cell);
+    });
 
-    for (
-        let r = 0;
-        r < 4;
-        r++
-    ) {
+    const total = square[0].reduce((a,b) => a+b, 0);
 
-        for (
-            let c = 0;
-            c < 4;
-            c++
-        ) {
+    document.getElementById("rowTotal").innerText =
+        "ROW TOTAL: " + total;
 
-            const cell =
-            document
-            .createElement("div");
+    document.getElementById("columnTotal").innerText =
+        "COLUMN TOTAL: " + total;
 
-
-            cell.className =
-            "cell";
-
-
-            cell.innerText =
-            square[r][c];
-
-
-            grid.appendChild(cell);
-
-        }
-
-    }
-
-
-    const total =
-    square[0][0] +
-    square[0][1] +
-    square[0][2] +
-    square[0][3];
-
-
-    document
-    .getElementById("rowTotal")
-    .innerText =
-    "ROW TOTAL: " + total;
-
-
-    document
-    .getElementById("columnTotal")
-    .innerText =
-    "COLUMN TOTAL: " + total;
-
-
-    card
-    .classList
-    .remove("hidden");
-
+    document.getElementById("previewCard").classList.remove("hidden");
 }
 
 
-/* =========================================
-   FIRESTORE DATA
-   NO ARRAYS
-========================================= */
+/* FIRESTORE DATA — SCALAR FIELDS ONLY */
+function createFirestoreData(gameId, square) {
 
-function createFirestoreData(
-    gameId,
-    square
-) {
-
-    const n1 =
-    Number(square[0][0]);
-
-    const n2 =
-    Number(square[0][1]);
-
-    const n3 =
-    Number(square[0][2]);
-
-    const n4 =
-    Number(square[0][3]);
-
-
-    const n5 =
-    Number(square[1][0]);
-
-    const n6 =
-    Number(square[1][1]);
-
-    const n7 =
-    Number(square[1][2]);
-
-    const n8 =
-    Number(square[1][3]);
-
-
-    const n9 =
-    Number(square[2][0]);
-
-    const n10 =
-    Number(square[2][1]);
-
-    const n11 =
-    Number(square[2][2]);
-
-    const n12 =
-    Number(square[2][3]);
-
-
-    const n13 =
-    Number(square[3][0]);
-
-    const n14 =
-    Number(square[3][1]);
-
-    const n15 =
-    Number(square[3][2]);
-
-    const n16 =
-    Number(square[3][3]);
-
-
-    const total =
-    n1 + n2 + n3 + n4;
-
-
-    /*
-       ONLY SIMPLE FIELDS.
-       NO ARRAY.
-       NO GRID ARRAY.
-       NO NUMBERS ARRAY.
-    */
-
-    return {
-
+    const data = {
         gameId: gameId,
 
-        n1: n1,
-        n2: n2,
-        n3: n3,
-        n4: n4,
+        row1Total: square[0].reduce((a,b)=>a+b,0),
+        row2Total: square[1].reduce((a,b)=>a+b,0),
+        row3Total: square[2].reduce((a,b)=>a+b,0),
+        row4Total: square[3].reduce((a,b)=>a+b,0),
 
-        n5: n5,
-        n6: n6,
-        n7: n7,
-        n8: n8,
+        col1Total: square[0][0]+square[1][0]+square[2][0]+square[3][0],
+        col2Total: square[0][1]+square[1][1]+square[2][1]+square[3][1],
+        col3Total: square[0][2]+square[1][2]+square[2][2]+square[3][2],
+        col4Total: square[0][3]+square[1][3]+square[2][3]+square[3][3],
 
-        n9: n9,
-        n10: n10,
-        n11: n11,
-        n12: n12,
-
-        n13: n13,
-        n14: n14,
-        n15: n15,
-        n16: n16,
-
-        row1Total: total,
-        row2Total: total,
-        row3Total: total,
-        row4Total: total,
-
-        col1Total: total,
-        col2Total: total,
-        col3Total: total,
-        col4Total: total,
-
-        magicTotal: total,
-
-        createdAt:
-        serverTimestamp()
-
+        createdAt: serverTimestamp()
     };
 
+    let count = 1;
+
+    for (let r=0; r<4; r++) {
+        for (let c=0; c<4; c++) {
+            data["n" + count] = Number(square[r][c]);
+            count++;
+        }
+    }
+
+    data.magicTotal = data.row1Total;
+
+    return data;
 }
 
 
-/* =========================================
-   GENERATE 50 GAMES
-========================================= */
+/* GENERATE & SAVE 50 GAMES */
+window.generateGames = async function() {
 
-window.generateGames =
-async function() {
-
-    /*
-       ADMIN CHECK
-    */
-
-    if (
-        !auth.currentUser
-    ) {
-
-        alert(
-            "Please login first."
-        );
-
+    if (!auth.currentUser || auth.currentUser.uid !== ADMIN_UID) {
+        alert("Admin login required.");
         return;
-
     }
 
-
-    if (
-        auth.currentUser.uid !== ADMIN_UID
-    ) {
-
-        alert(
-            "Admin only."
-        );
-
+    if (generationRunning) {
+        alert("Generation is already running.");
         return;
-
     }
 
+    generationRunning = true;
+    stopRequested = false;
 
-    stopRequested =
-    false;
+    const status = document.getElementById("status");
+    status.innerText = "Generating 50 games...";
 
-
-    const status =
-    document
-    .getElementById("status");
-
-
-    status.innerText =
-    "GENERATING 50 GAMES...";
-
-
-    /*
-       One Firestore batch.
-
-       IMPORTANT:
-       NO getDoc()
-       NO existing-game read.
-    */
-
-    const batch =
-    writeBatch(db);
-
+    const batch = writeBatch(db);
 
     try {
 
-        /*
-           Generate exactly 50.
-        */
+        for (let i=0; i<50; i++) {
 
-        for (
-            let i = 0;
-            i < 50;
-            i++
-        ) {
-
-            if (
-                stopRequested
-            ) {
-
+            if (stopRequested) {
                 status.innerText =
-                "Generation stopped.";
-
+                    "Stopped before saving. No batch was committed.";
+                generationRunning = false;
                 return;
-
             }
 
+            const gameId = "MKND" + String(840001+i);
+            const square = createGame(i);
 
-            const gameId =
-            "MKND" +
-            String(
-                840001 + i
-            );
-
-
-            /*
-               Create game.
-            */
-
-            const square =
-            createGame(i);
-
-
-            /*
-               Validate game.
-            */
-
-            if (
-                !validateGame(square)
-            ) {
-
-                throw new Error(
-                    "Game validation failed: " +
-                    gameId
-                );
-
+            if (!validateGame(square)) {
+                throw new Error("Validation failed: " + gameId);
             }
 
+            const data = createFirestoreData(gameId, square);
+            const gameRef = doc(db, "games", gameId);
 
-            /*
-               Preview latest game.
-            */
+            batch.set(gameRef, data);
 
-            showPreview(
-                gameId,
-                square
-            );
-
-
-            /*
-               Firestore scalar data.
-            */
-
-            const data =
-            createFirestoreData(
-                gameId,
-                square
-            );
-
-
-            /*
-               Document reference.
-            */
-
-            const gameRef =
-            doc(
-                db,
-                "games",
-                gameId
-            );
-
-
-            /*
-               SAVE TO BATCH.
-
-               No arrays.
-            */
-
-            batch.set(
-                gameRef,
-                data
-            );
-
+            showPreview(gameId, square);
 
             status.innerText =
-            "Generated " +
-            (i + 1) +
-            " / 50 : " +
-            gameId;
-
+                "Prepared " + (i+1) + " / 50: " + gameId;
         }
 
-
-        /*
-           STOP CHECK
-        */
-
-        if (
-            stopRequested
-        ) {
-
-            status.innerText =
-            "Generation stopped.";
-
+        if (stopRequested) {
+            status.innerText = "Stopped before Firebase save.";
+            generationRunning = false;
             return;
-
         }
 
-
-        /*
-           SAVE ALL 50
-        */
-
-        status.innerText =
-        "Saving 50 games to Firebase...";
-
+        status.innerText = "Saving 50 games to Firebase...";
 
         await batch.commit();
 
+        status.innerText = "SUCCESS: 50 games saved to Firebase.";
 
-        /*
-           SUCCESS
-        */
+        alert("SUCCESS! 50 games saved.");
 
-        status.innerText =
-        "SUCCESS: 50 games saved to Firebase.";
-
-
-        alert(
-            "SUCCESS!\n\n" +
-            "50 games saved to Firestore."
-        );
-
+    } catch(error) {
+        console.error(error);
+        status.innerText = "ERROR: " + error.message;
+        alert("Firebase Error:\n\n" + error.message);
     }
 
-    catch(error) {
-
-        console.error(
-            "FIRESTORE ERROR:",
-            error
-        );
+    generationRunning = false;
+};
 
 
-        status.innerText =
-        "ERROR: " +
-        error.message;
-
-
-        alert(
-            "Firebase Error:\n\n" +
-            error.message
-        );
-
-    }
-
+/* STOP */
+window.stopGeneration = function() {
+    stopRequested = true;
+    document.getElementById("status").innerText =
+        "Stop requested...";
 };
 
 
 /* =========================================
-   STOP
+   LOAD SAVED GAMES
 ========================================= */
+window.loadSavedGames = async function() {
 
-window.stopGeneration =
-function() {
+    if (!auth.currentUser || auth.currentUser.uid !== ADMIN_UID) {
+        alert("Admin login required.");
+        return;
+    }
 
-    stopRequested =
-    true;
+    const status = document.getElementById("status");
+    const select = document.getElementById("savedGameSelect");
+
+    status.innerText = "Loading saved games from Firebase...";
+    select.innerHTML = '<option value="">Select Game ID</option>';
+    savedGames = {};
+
+    try {
+
+        const snapshot = await getDocs(collection(db, "games"));
+
+        if (snapshot.empty) {
+            status.innerText = "No saved games found.";
+            return;
+        }
+
+        const documents = [];
+
+        snapshot.forEach(gameDoc => {
+            documents.push({
+                id: gameDoc.id,
+                data: gameDoc.data()
+            });
+        });
+
+        documents.sort((a,b) => a.id.localeCompare(b.id));
+
+        documents.forEach(game => {
+
+            savedGames[game.id] = game.data;
+
+            const option = document.createElement("option");
+            option.value = game.id;
+            option.textContent = game.id;
+
+            select.appendChild(option);
+        });
+
+        status.innerText =
+            "Loaded " + documents.length + " saved games.";
+
+    } catch(error) {
+        console.error(error);
+        status.innerText = "LOAD ERROR: " + error.message;
+        alert("Firebase Load Error:\n\n" + error.message);
+    }
+};
 
 
-    document
-    .getElementById("status")
-    .innerText =
-    "Stopping...";
+/* =========================================
+   VIEW SELECTED GAME
+========================================= */
+window.viewSelectedGame = function() {
 
+    const gameId = document.getElementById("savedGameSelect").value;
+
+    if (!gameId) {
+        alert("Please select a Game ID.");
+        return;
+    }
+
+    const data = savedGames[gameId];
+
+    if (!data) {
+        alert("Game data not found. Load saved games again.");
+        return;
+    }
+
+    const square = [
+        [data.n1, data.n2, data.n3, data.n4],
+        [data.n5, data.n6, data.n7, data.n8],
+        [data.n9, data.n10, data.n11, data.n12],
+        [data.n13, data.n14, data.n15, data.n16]
+    ];
+
+    showPreview(gameId, square);
+
+    document.getElementById("status").innerText =
+        "Viewing saved game: " + gameId;
 };
 
 </script>
-
 </body>
 </html>

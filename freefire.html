@@ -1,1253 +1,437 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Battle Zone</title>
+<title>Forest Battle</title>
 
 <style>
-
-/* =========================
-   BASIC
-========================= */
-
 *{
     box-sizing:border-box;
     user-select:none;
-    -webkit-user-select:none;
 }
 
-html,
 body{
     margin:0;
-    padding:0;
-    width:100%;
-    height:100%;
-    overflow:hidden;
     background:#101820;
+    color:white;
     font-family:Arial,sans-serif;
+    text-align:center;
 }
 
-
-/* =========================
-   GAME
-========================= */
+h2{
+    margin:12px 0;
+}
 
 #game{
-
     position:relative;
-
-    width:100vw;
-    height:100vh;
-
-    overflow:hidden;
-
-    background:
-    linear-gradient(
-        to bottom,
-        #15263d 0%,
-        #244d38 55%,
-        #101f16 100%
-    );
-}
-
-
-/* =========================
-   HUD
-========================= */
-
-#hud{
-
-    position:absolute;
-
-    top:10px;
-    left:10px;
-    right:10px;
-
-    display:flex;
-    justify-content:space-between;
-
-    color:white;
-
-    font-size:18px;
-    font-weight:bold;
-
-    z-index:100;
-}
-
-
-/* =========================
-   HEALTH
-========================= */
-
-#healthBox{
-
-    position:absolute;
-
-    top:42px;
-    left:10px;
-
-    width:160px;
-    height:16px;
-
-    background:#555;
-
-    border-radius:10px;
-
-    overflow:hidden;
-
-    z-index:100;
-}
-
-#health{
-
     width:100%;
-    height:100%;
-
-    background:#00e676;
-
-    transition:width .2s;
-}
-
-
-/* =========================
-   SHOOTER
-========================= */
-
-#player{
-
-    position:absolute;
-
-    width:80px;
-    height:28px;
-
-    left:50%;
-    bottom:85px;
-
-    transform:translateX(-50%);
-
-    background:#1976d2;
-
-    border:3px solid white;
-
-    border-radius:8px;
-
-    z-index:50;
-}
-
-
-/* Shooter cannon */
-
-#player::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:12px;
-    height:35px;
-
-    left:31px;
-    top:-35px;
-
-    background:#222;
-
-    border:2px solid white;
-
-    border-radius:5px;
-}
-
-
-/* Shooter base */
-
-#player::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:100px;
-    height:8px;
-
-    left:-13px;
-    bottom:-10px;
-
-    background:#0d47a1;
-
-    border-radius:5px;
-}
-
-
-/* =========================
-   ENEMY
-========================= */
-
-.enemy{
-
-    position:absolute;
-
-    width:42px;
-    height:42px;
-
-    background:#e53935;
-
-    border:3px solid white;
-
-    border-radius:50%;
-
-    z-index:40;
-}
-
-
-/* Enemy eye */
-
-.enemy::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:9px;
-    height:9px;
-
-    left:9px;
-    top:10px;
-
-    background:white;
-
-    border-radius:50%;
-}
-
-
-/* Enemy eye 2 */
-
-.enemy::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:9px;
-    height:9px;
-
-    right:9px;
-    top:10px;
-
-    background:white;
-
-    border-radius:50%;
-}
-
-
-/* =========================
-   BULLET
-========================= */
-
-.bullet{
-
-    position:absolute;
-
-    width:7px;
-    height:20px;
-
-    background:#ffd600;
-
-    border-radius:5px;
-
-    box-shadow:
-    0 0 10px #ffd600;
-
-    z-index:60;
-}
-
-
-/* =========================
-   CONTROLS
-========================= */
-
-#controls{
-
-    position:absolute;
-
-    left:15px;
-    bottom:15px;
-
-    display:flex;
-
-    gap:10px;
-
-    z-index:100;
-}
-
-
-.control{
-
-    width:65px;
-    height:55px;
-
-    border:2px solid white;
-
-    border-radius:12px;
-
+    max-width:700px;
+    height:430px;
+    margin:auto;
+    overflow:hidden;
     background:
-    rgba(255,255,255,.20);
-
-    color:white;
-
-    font-size:28px;
-
-    font-weight:bold;
-
-    touch-action:none;
+      linear-gradient(#8fd3ff 0 45%,#5c9e38 45% 100%);
+    border:3px solid #222;
 }
 
-
-/* =========================
-   FIRE
-========================= */
-
-#fire{
-
+/* Ground */
+.ground{
     position:absolute;
-
-    right:20px;
-    bottom:15px;
-
-    width:95px;
-    height:65px;
-
-    border-radius:15px;
-
-    background:#f44336;
-
-    border:3px solid white;
-
-    color:white;
-
-    font-size:18px;
-
-    font-weight:bold;
-
-    z-index:100;
-
-    touch-action:none;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:45%;
+    background:
+      radial-gradient(circle at 20% 30%,#477d2e 0 4px,transparent 5px),
+      radial-gradient(circle at 70% 50%,#477d2e 0 4px,transparent 5px),
+      #39752d;
 }
 
+/* Trees */
+.tree{
+    position:absolute;
+    bottom:105px;
+    width:25px;
+    height:180px;
+    background:#684021;
+    border-radius:8px;
+}
 
-/* =========================
-   GAME OVER
-========================= */
+.tree:before{
+    content:"";
+    position:absolute;
+    width:110px;
+    height:110px;
+    left:-42px;
+    top:-65px;
+    background:#205c2b;
+    border-radius:50%;
+    box-shadow:
+      55px -25px 0 #276b32,
+      -35px 15px 0 #2b7336;
+}
+
+.t1{left:12%}
+.t2{left:48%}
+.t3{left:82%}
+
+/* People */
+.person{
+    position:absolute;
+    bottom:105px;
+    width:65px;
+    height:115px;
+    transition:all .7s ease;
+}
+
+.head{
+    position:absolute;
+    top:0;
+    left:20px;
+    width:30px;
+    height:30px;
+    background:#e4a16b;
+    border-radius:50%;
+}
+
+.body{
+    position:absolute;
+    top:30px;
+    left:25px;
+    width:20px;
+    height:50px;
+    background:#2874b8;
+    border-radius:8px;
+}
+
+.arm{
+    position:absolute;
+    top:35px;
+    width:38px;
+    height:8px;
+    background:#e4a16b;
+    border-radius:5px;
+}
+
+.arm.left{
+    left:-5px;
+    transform:rotate(25deg);
+}
+
+.arm.right{
+    left:32px;
+    transform:rotate(-25deg);
+}
+
+.leg{
+    position:absolute;
+    top:76px;
+    width:9px;
+    height:42px;
+    background:#252525;
+    border-radius:5px;
+}
+
+.leg.left{left:23px;transform:rotate(10deg)}
+.leg.right{left:38px;transform:rotate(-10deg)}
+
+#p1{
+    left:27%;
+}
+
+#p2{
+    left:57%;
+}
+
+/* Archer */
+#archer{
+    position:absolute;
+    left:78%;
+    bottom:110px;
+    width:65px;
+    height:115px;
+    opacity:0;
+    transition:.5s;
+}
+
+#archer.show{
+    opacity:1;
+}
+
+/* Arrow */
+#arrow{
+    position:absolute;
+    width:100px;
+    height:5px;
+    background:#4b2d17;
+    border-radius:4px;
+    transform-origin:left center;
+    opacity:0;
+    z-index:10;
+}
+
+#arrow:after{
+    content:"";
+    position:absolute;
+    right:-2px;
+    top:-5px;
+    border-left:15px solid #222;
+    border-top:7px solid transparent;
+    border-bottom:7px solid transparent;
+}
+
+/* Fallen */
+.dead{
+    transform:rotate(90deg) translateY(25px);
+    opacity:.75;
+}
+
+/* Handshake */
+.handshake{
+    transform:translateX(-15px);
+}
 
 #message{
-
-    display:none;
-
-    position:absolute;
-
-    left:50%;
-    top:50%;
-
-    transform:
-    translate(-50%,-50%);
-
-    width:280px;
-
-    padding:30px;
-
-    background:
-    rgba(0,0,0,.92);
-
-    color:white;
-
-    text-align:center;
-
-    border-radius:15px;
-
-    z-index:200;
+    min-height:28px;
+    margin:10px;
+    font-size:18px;
+    font-weight:bold;
 }
 
+button{
+    min-width:150px;
+    min-height:50px;
+    border:0;
+    border-radius:12px;
+    font-size:18px;
+    font-weight:bold;
+    background:#e67e22;
+    color:white;
+}
+
+button:disabled{
+    opacity:.45;
+}
 
 #restart{
-
-    margin-top:15px;
-
-    padding:12px 25px;
-
-    border:0;
-
-    border-radius:8px;
-
-    background:#2196f3;
-
-    color:white;
-
-    font-size:17px;
+    background:#555;
+    margin-left:8px;
 }
-
-
-/* =========================
-   HIT EFFECT
-========================= */
-
-.hit{
-
-    animation:
-    hitFlash .15s;
-}
-
-
-@keyframes hitFlash{
-
-    0%{
-        opacity:1;
-    }
-
-    50%{
-        opacity:.3;
-    }
-
-    100%{
-        opacity:1;
-    }
-}
-
 </style>
-
 </head>
-
 
 <body>
 
+<h2>🌲 FOREST BATTLE</h2>
 
 <div id="game">
 
+    <div class="ground"></div>
 
-    <!-- HUD -->
+    <div class="tree t1"></div>
+    <div class="tree t2"></div>
+    <div class="tree t3"></div>
 
-    <div id="hud">
-
-        <div>
-            🎮 BATTLE ZONE
-        </div>
-
-        <div>
-            SCORE:
-            <span id="score">0</span>
-        </div>
-
+    <!-- Person 1 -->
+    <div class="person" id="p1">
+        <div class="head"></div>
+        <div class="body"></div>
+        <div class="arm left"></div>
+        <div class="arm right"></div>
+        <div class="leg left"></div>
+        <div class="leg right"></div>
     </div>
 
-
-    <!-- HEALTH -->
-
-    <div id="healthBox">
-
-        <div id="health"></div>
-
+    <!-- Person 2 -->
+    <div class="person" id="p2">
+        <div class="head"></div>
+        <div class="body" style="background:#b63b3b"></div>
+        <div class="arm left"></div>
+        <div class="arm right"></div>
+        <div class="leg left"></div>
+        <div class="leg right"></div>
     </div>
 
-
-    <!-- HORIZONTAL SHOOTER -->
-
-    <div id="player"></div>
-
-
-    <!-- LEFT / RIGHT -->
-
-    <div id="controls">
-
-        <button
-            class="control"
-            id="left">
-            ◀
-        </button>
-
-        <button
-            class="control"
-            id="right">
-            ▶
-        </button>
-
+    <!-- Archer -->
+    <div id="archer" class="person">
+        <div class="head"></div>
+        <div class="body" style="background:#6b3fa0"></div>
+        <div class="arm left"></div>
+        <div class="arm right"></div>
+        <div class="leg left"></div>
+        <div class="leg right"></div>
     </div>
 
-
-    <!-- FIRE -->
-
-    <button id="fire">
-        🔥 FIRE
-    </button>
-
-
-    <!-- GAME OVER -->
-
-    <div id="message">
-
-        <h2>
-            GAME OVER
-        </h2>
-
-        <p>
-            Your Score:
-            <span id="finalScore">0</span>
-        </p>
-
-        <button id="restart">
-            PLAY AGAIN
-        </button>
-
-    </div>
+    <div id="arrow"></div>
 
 </div>
 
+<div id="message">
+    Click ARROW to attack
+</div>
+
+<button id="arrowBtn">🏹 ARROW</button>
+<button id="restart">🔄 RESTART</button>
 
 <script>
 
-/* =========================
-   VARIABLES
-========================= */
+const p1 = document.getElementById("p1");
+const p2 = document.getElementById("p2");
+const archer = document.getElementById("archer");
+const arrow = document.getElementById("arrow");
+const arrowBtn = document.getElementById("arrowBtn");
+const restartBtn = document.getElementById("restart");
+const message = document.getElementById("message");
 
-const game =
-    document.getElementById("game");
+let finished = false;
 
-const player =
-    document.getElementById("player");
+/* Initial fight animation */
+let fightTimer = setInterval(() => {
 
-const leftButton =
-    document.getElementById("left");
+    if(finished) return;
 
-const rightButton =
-    document.getElementById("right");
+    p1.style.transform =
+        p1.style.transform === "translateX(10px)"
+        ? "translateX(-10px)"
+        : "translateX(10px)";
 
-const fireButton =
-    document.getElementById("fire");
+    p2.style.transform =
+        p2.style.transform === "translateX(-10px)"
+        ? "translateX(10px)"
+        : "translateX(-10px)";
 
+},400);
 
-let playerX =
-    window.innerWidth / 2;
 
+/* ARROW CLICK */
+arrowBtn.addEventListener("click",()=>{
 
-let health = 100;
+    if(finished) return;
 
-let score = 0;
+    finished = true;
+    clearInterval(fightTimer);
 
-let gameOver = false;
+    arrowBtn.disabled = true;
 
-let movingLeft = false;
+    message.textContent = "🏹 Arrow released!";
 
-let movingRight = false;
+    /* Archer appears from behind tree */
+    archer.classList.add("show");
 
+    /* Put arrow near archer */
+    const gameRect =
+        document.getElementById("game").getBoundingClientRect();
 
-/* =========================
-   PLAYER MOVEMENT
-   LEFT / RIGHT ONLY
-========================= */
+    const p1Rect = p1.getBoundingClientRect();
 
-function updatePlayer(){
+    const startX =
+        archer.getBoundingClientRect().left -
+        gameRect.left;
 
-    if(gameOver){
-        return;
-    }
+    const startY =
+        archer.getBoundingClientRect().top -
+        gameRect.top + 45;
 
+    const targetX =
+        p1Rect.left -
+        gameRect.left + 20;
 
-    const speed = 6;
+    const targetY =
+        p1Rect.top -
+        gameRect.top + 50;
 
+    const dx = targetX - startX;
+    const dy = targetY - startY;
 
-    if(movingLeft){
+    const distance = Math.sqrt(dx*dx + dy*dy);
+    const angle = Math.atan2(dy,dx) * 180 / Math.PI;
 
-        playerX -= speed;
+    arrow.style.left = startX + "px";
+    arrow.style.top = startY + "px";
+    arrow.style.width = distance + "px";
+    arrow.style.transform =
+        "rotate("+angle+"deg)";
+    arrow.style.opacity = "1";
 
-    }
+    /* Arrow flies only after button click */
+    setTimeout(()=>{
 
+        arrow.style.left = targetX + "px";
+        arrow.style.top = targetY + "px";
 
-    if(movingRight){
+    },50);
 
-        playerX += speed;
 
-    }
+    /* Hit */
+    setTimeout(()=>{
 
+        arrow.style.opacity = "0";
 
-    const halfWidth = 40;
+        p1.classList.add("dead");
 
+        message.textContent =
+            "Person 1 is out. Person 2 and Archer meet.";
 
-    if(
-        playerX <
-        halfWidth
-    ){
+    },800);
 
-        playerX =
-            halfWidth;
 
-    }
+    /* Handshake */
+    setTimeout(()=>{
 
+        p2.classList.add("handshake");
 
-    if(
-        playerX >
-        window.innerWidth -
-        halfWidth
-    ){
+        archer.style.left = "68%";
 
-        playerX =
-            window.innerWidth -
-            halfWidth;
+        message.textContent =
+            "🤝 Person 2 and Archer shake hands!";
 
-    }
+    },1600);
 
+});
 
-    player.style.left =
-        playerX + "px";
 
+/* Restart */
+restartBtn.addEventListener("click",()=>{
 
-    requestAnimationFrame(
-        updatePlayer
-    );
-}
+    finished = false;
 
+    clearInterval(fightTimer);
 
-updatePlayer();
+    p1.classList.remove("dead");
+    p2.classList.remove("handshake");
 
+    p1.style.transform = "";
+    p2.style.transform = "";
 
-/* =========================
-   MOVE BUTTONS
-========================= */
+    archer.classList.remove("show");
+    archer.style.left = "78%";
 
-function startLeft(e){
+    arrow.style.opacity = "0";
 
-    e.preventDefault();
+    arrowBtn.disabled = false;
 
-    movingLeft = true;
-}
+    message.textContent =
+        "Click ARROW to attack";
 
+    fightTimer = setInterval(() => {
 
-function stopLeft(e){
+        if(finished) return;
 
-    e.preventDefault();
+        p1.style.transform =
+            p1.style.transform === "translateX(10px)"
+            ? "translateX(-10px)"
+            : "translateX(10px)";
 
-    movingLeft = false;
-}
+        p2.style.transform =
+            p2.style.transform === "translateX(-10px)"
+            ? "translateX(10px)"
+            : "translateX(-10px)";
 
+    },400);
 
-function startRight(e){
-
-    e.preventDefault();
-
-    movingRight = true;
-}
-
-
-function stopRight(e){
-
-    e.preventDefault();
-
-    movingRight = false;
-}
-
-
-leftButton.addEventListener(
-    "pointerdown",
-    startLeft
-);
-
-leftButton.addEventListener(
-    "pointerup",
-    stopLeft
-);
-
-leftButton.addEventListener(
-    "pointercancel",
-    stopLeft
-);
-
-leftButton.addEventListener(
-    "pointerleave",
-    stopLeft
-);
-
-
-rightButton.addEventListener(
-    "pointerdown",
-    startRight
-);
-
-rightButton.addEventListener(
-    "pointerup",
-    stopRight
-);
-
-rightButton.addEventListener(
-    "pointercancel",
-    stopRight
-);
-
-rightButton.addEventListener(
-    "pointerleave",
-    stopRight
-);
-
-
-/* =========================
-   KEYBOARD
-========================= */
-
-document.addEventListener(
-    "keydown",
-    function(e){
-
-        if(e.key === "ArrowLeft"){
-
-            movingLeft = true;
-
-        }
-
-
-        if(e.key === "ArrowRight"){
-
-            movingRight = true;
-
-        }
-
-
-        if(e.code === "Space"){
-
-            shoot();
-
-        }
-
-    }
-);
-
-
-document.addEventListener(
-    "keyup",
-    function(e){
-
-        if(e.key === "ArrowLeft"){
-
-            movingLeft = false;
-
-        }
-
-
-        if(e.key === "ArrowRight"){
-
-            movingRight = false;
-
-        }
-
-    }
-);
-
-
-/* =========================
-   SHOOT
-   BOTTOM → TOP
-========================= */
-
-function shoot(){
-
-    if(gameOver){
-        return;
-    }
-
-
-    const bullet =
-        document.createElement(
-            "div"
-        );
-
-
-    bullet.className =
-        "bullet";
-
-
-    let bulletX =
-        playerX;
-
-
-    let bulletY =
-        window.innerHeight -
-        120;
-
-
-    bullet.style.left =
-        (bulletX - 3) +
-        "px";
-
-
-    bullet.style.top =
-        bulletY + "px";
-
-
-    game.appendChild(
-        bullet
-    );
-
-
-    const timer =
-        setInterval(
-            function(){
-
-                if(gameOver){
-
-                    bullet.remove();
-
-                    clearInterval(
-                        timer
-                    );
-
-                    return;
-
-                }
-
-
-                /* MOVE UP */
-
-                bulletY -= 12;
-
-
-                bullet.style.top =
-                    bulletY + "px";
-
-
-                /* CHECK ENEMIES */
-
-                const enemies =
-                    document.querySelectorAll(
-                        ".enemy"
-                    );
-
-
-                enemies.forEach(
-                    function(enemy){
-
-                        const enemyX =
-                            parseFloat(
-                                enemy.style.left
-                            );
-
-
-                        const enemyY =
-                            parseFloat(
-                                enemy.style.top
-                            );
-
-
-                        const distance =
-                            Math.sqrt(
-
-                                Math.pow(
-                                    bulletX -
-                                    enemyX,
-                                    2
-                                )
-
-                                +
-
-                                Math.pow(
-                                    bulletY -
-                                    enemyY,
-                                    2
-                                )
-
-                            );
-
-
-                        if(
-                            distance < 32
-                        ){
-
-                            enemy.remove();
-
-                            bullet.remove();
-
-                            clearInterval(
-                                timer
-                            );
-
-
-                            score += 10;
-
-
-                            document
-                            .getElementById(
-                                "score"
-                            )
-                            .textContent =
-                                score;
-
-                        }
-
-                    }
-                );
-
-
-                /* BULLET OUT */
-
-                if(
-                    bulletY < -30
-                ){
-
-                    bullet.remove();
-
-                    clearInterval(
-                        timer
-                    );
-
-                }
-
-            },
-            20
-        );
-}
-
-
-/* =========================
-   FIRE BUTTON
-========================= */
-
-fireButton.addEventListener(
-    "pointerdown",
-    function(e){
-
-        e.preventDefault();
-
-        shoot();
-
-    }
-);
-
-
-/* =========================
-   CREATE ENEMY
-   TOP ONLY
-========================= */
-
-function createEnemy(){
-
-    if(gameOver){
-        return;
-    }
-
-
-    const enemy =
-        document.createElement(
-            "div"
-        );
-
-
-    enemy.className =
-        "enemy";
-
-
-    /*
-       RANDOM X
-
-       Y ALWAYS TOP
-    */
-
-    const enemyX =
-        25 +
-        Math.random() *
-        (
-            window.innerWidth -
-            50
-        );
-
-
-    let enemyY = -50;
-
-
-    enemy.style.left =
-        enemyX + "px";
-
-
-    enemy.style.top =
-        enemyY + "px";
-
-
-    game.appendChild(
-        enemy
-    );
-
-
-    moveEnemy(enemy);
-}
-
-
-/* =========================
-   ENEMY
-   TOP → BOTTOM
-========================= */
-
-function moveEnemy(enemy){
-
-    const speed =
-        2 +
-        Math.random() * 1.5;
-
-
-    const timer =
-        setInterval(
-            function(){
-
-                if(gameOver){
-
-                    clearInterval(
-                        timer
-                    );
-
-                    return;
-                }
-
-
-                let enemyY =
-                    parseFloat(
-                        enemy.style.top
-                    );
-
-
-                /*
-                   ONLY DOWN
-
-                   NO LEFT
-                   NO RIGHT
-                */
-
-                enemyY += speed;
-
-
-                enemy.style.top =
-                    enemyY + "px";
-
-
-                const enemyX =
-                    parseFloat(
-                        enemy.style.left
-                    );
-
-
-                /*
-                   SHOOTER CENTER
-                */
-
-                const shooterY =
-                    window.innerHeight -
-                    99;
-
-
-                /*
-                   COLLISION
-                */
-
-                const distance =
-                    Math.sqrt(
-
-                        Math.pow(
-                            enemyX -
-                            playerX,
-                            2
-                        )
-
-                        +
-
-                        Math.pow(
-                            enemyY -
-                            shooterY,
-                            2
-                        )
-
-                    );
-
-
-                if(
-                    distance < 45
-                ){
-
-                    enemy.remove();
-
-                    clearInterval(
-                        timer
-                    );
-
-                    damagePlayer();
-
-                    return;
-
-                }
-
-
-                /*
-                   ENEMY REACHES
-                   BOTTOM
-                */
-
-                if(
-                    enemyY >
-                    window.innerHeight +
-                    50
-                ){
-
-                    enemy.remove();
-
-                    clearInterval(
-                        timer
-                    );
-
-                    damagePlayer();
-
-                }
-
-            },
-            30
-        );
-}
-
-
-/* =========================
-   DAMAGE
-========================= */
-
-function damagePlayer(){
-
-    if(gameOver){
-        return;
-    }
-
-
-    health -= 20;
-
-
-    if(health < 0){
-        health = 0;
-    }
-
-
-    document.getElementById(
-        "health"
-    ).style.width =
-        health + "%";
-
-
-    player.classList.add(
-        "hit"
-    );
-
-
-    setTimeout(
-        function(){
-
-            player.classList.remove(
-                "hit"
-            );
-
-        },
-        150
-    );
-
-
-    if(health <= 0){
-
-        endGame();
-
-    }
-}
-
-
-/* =========================
-   GAME OVER
-========================= */
-
-function endGame(){
-
-    gameOver = true;
-
-
-    document.getElementById(
-        "finalScore"
-    ).textContent =
-        score;
-
-
-    document.getElementById(
-        "message"
-    ).style.display =
-        "block";
-
-}
-
-
-/* =========================
-   RESTART
-========================= */
-
-document.getElementById(
-    "restart"
-).addEventListener(
-    "click",
-    function(){
-
-        location.reload();
-
-    }
-);
-
-
-/* =========================
-   ENEMY SPAWN
-========================= */
-
-setInterval(
-    function(){
-
-        if(!gameOver){
-
-            createEnemy();
-
-        }
-
-    },
-    1000
-);
-
-
-/* =========================
-   FIRST ENEMY
-========================= */
-
-setTimeout(
-    function(){
-
-        createEnemy();
-
-    },
-    300
-);
-
-
-/* =========================
-   RESIZE
-========================= */
-
-window.addEventListener(
-    "resize",
-    function(){
-
-        const maxX =
-            window.innerWidth -
-            40;
-
-
-        if(playerX > maxX){
-
-            playerX = maxX;
-
-        }
-
-    }
-);
+});
 
 </script>
 

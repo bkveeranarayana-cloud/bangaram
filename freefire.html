@@ -19,7 +19,6 @@
     box-sizing:border-box;
     user-select:none;
     -webkit-user-select:none;
-    touch-action:none;
 }
 
 html,
@@ -35,7 +34,7 @@ body{
 
 
 /* =========================
-   GAME AREA
+   GAME
 ========================= */
 
 #game{
@@ -50,9 +49,9 @@ body{
     background:
     linear-gradient(
         to bottom,
-        #172b45 0%,
-        #234d38 55%,
-        #142719 100%
+        #15263d 0%,
+        #244d38 55%,
+        #101f16 100%
     );
 }
 
@@ -82,7 +81,7 @@ body{
 
 
 /* =========================
-   HEALTH BAR
+   HEALTH
 ========================= */
 
 #healthBox{
@@ -104,7 +103,6 @@ body{
     z-index:100;
 }
 
-
 #health{
 
     width:100%;
@@ -112,39 +110,59 @@ body{
 
     background:#00e676;
 
-    transition:
-    width .2s;
+    transition:width .2s;
 }
 
 
 /* =========================
-   PLAYER / SHOOTER
+   SHOOTER
 ========================= */
 
 #player{
 
     position:absolute;
 
-    width:50px;
-    height:50px;
+    width:80px;
+    height:28px;
 
     left:50%;
-
     bottom:85px;
 
     transform:translateX(-50%);
 
-    background:#2196f3;
+    background:#1976d2;
 
     border:3px solid white;
 
-    border-radius:50%;
+    border-radius:8px;
 
     z-index:50;
 }
 
 
-/* Gun pointing upward */
+/* Shooter cannon */
+
+#player::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:12px;
+    height:35px;
+
+    left:31px;
+    top:-35px;
+
+    background:#222;
+
+    border:2px solid white;
+
+    border-radius:5px;
+}
+
+
+/* Shooter base */
 
 #player::after{
 
@@ -152,15 +170,15 @@ body{
 
     position:absolute;
 
-    width:9px;
-    height:35px;
+    width:100px;
+    height:8px;
 
-    background:#222;
+    left:-13px;
+    bottom:-10px;
 
-    left:17px;
-    top:-32px;
+    background:#0d47a1;
 
-    border-radius:6px;
+    border-radius:5px;
 }
 
 
@@ -172,8 +190,8 @@ body{
 
     position:absolute;
 
-    width:40px;
-    height:40px;
+    width:42px;
+    height:42px;
 
     background:#e53935;
 
@@ -187,21 +205,41 @@ body{
 
 /* Enemy eye */
 
+.enemy::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:9px;
+    height:9px;
+
+    left:9px;
+    top:10px;
+
+    background:white;
+
+    border-radius:50%;
+}
+
+
+/* Enemy eye 2 */
+
 .enemy::after{
 
     content:"";
 
     position:absolute;
 
-    width:8px;
-    height:8px;
+    width:9px;
+    height:9px;
+
+    right:9px;
+    top:10px;
 
     background:white;
 
     border-radius:50%;
-
-    left:12px;
-    top:10px;
 }
 
 
@@ -213,17 +251,17 @@ body{
 
     position:absolute;
 
-    width:8px;
-    height:18px;
+    width:7px;
+    height:20px;
 
     background:#ffd600;
 
     border-radius:5px;
 
-    z-index:60;
-
     box-shadow:
-    0 0 8px #ffd600;
+    0 0 10px #ffd600;
+
+    z-index:60;
 }
 
 
@@ -248,8 +286,8 @@ body{
 
 .control{
 
-    width:70px;
-    height:60px;
+    width:65px;
+    height:55px;
 
     border:2px solid white;
 
@@ -261,12 +299,15 @@ body{
     color:white;
 
     font-size:28px;
+
     font-weight:bold;
+
+    touch-action:none;
 }
 
 
 /* =========================
-   FIRE BUTTON
+   FIRE
 ========================= */
 
 #fire{
@@ -288,9 +329,12 @@ body{
     color:white;
 
     font-size:18px;
+
     font-weight:bold;
 
     z-index:100;
+
+    touch-action:none;
 }
 
 
@@ -346,7 +390,7 @@ body{
 
 
 /* =========================
-   HIT FLASH
+   HIT EFFECT
 ========================= */
 
 .hit{
@@ -359,18 +403,15 @@ body{
 @keyframes hitFlash{
 
     0%{
-        transform:
-        translateX(-50%) scale(1);
+        opacity:1;
     }
 
     50%{
-        transform:
-        translateX(-50%) scale(1.2);
+        opacity:.3;
     }
 
     100%{
-        transform:
-        translateX(-50%) scale(1);
+        opacity:1;
     }
 }
 
@@ -385,9 +426,7 @@ body{
 <div id="game">
 
 
-    <!-- =====================
-         HUD
-    ====================== -->
+    <!-- HUD -->
 
     <div id="hud">
 
@@ -403,9 +442,7 @@ body{
     </div>
 
 
-    <!-- =====================
-         HEALTH
-    ====================== -->
+    <!-- HEALTH -->
 
     <div id="healthBox">
 
@@ -414,53 +451,38 @@ body{
     </div>
 
 
-    <!-- =====================
-         PLAYER
-    ====================== -->
+    <!-- HORIZONTAL SHOOTER -->
 
     <div id="player"></div>
 
 
-    <!-- =====================
-         LEFT / RIGHT
-    ====================== -->
+    <!-- LEFT / RIGHT -->
 
     <div id="controls">
 
         <button
             class="control"
             id="left">
-
             ◀
-
         </button>
-
 
         <button
             class="control"
             id="right">
-
             ▶
-
         </button>
 
     </div>
 
 
-    <!-- =====================
-         FIRE
-    ====================== -->
+    <!-- FIRE -->
 
     <button id="fire">
-
         🔥 FIRE
-
     </button>
 
 
-    <!-- =====================
-         GAME OVER
-    ====================== -->
+    <!-- GAME OVER -->
 
     <div id="message">
 
@@ -469,30 +491,20 @@ body{
         </h2>
 
         <p>
-
             Your Score:
-
-            <span id="finalScore">
-                0
-            </span>
-
+            <span id="finalScore">0</span>
         </p>
 
-
         <button id="restart">
-
             PLAY AGAIN
-
         </button>
 
     </div>
-
 
 </div>
 
 
 <script>
-
 
 /* =========================
    VARIABLES
@@ -531,14 +543,13 @@ let movingRight = false;
 
 /* =========================
    PLAYER MOVEMENT
+   LEFT / RIGHT ONLY
 ========================= */
 
 function updatePlayer(){
 
     if(gameOver){
-
         return;
-
     }
 
 
@@ -559,28 +570,29 @@ function updatePlayer(){
     }
 
 
-    const halfPlayer = 25;
+    const halfWidth = 40;
 
 
-    const minX =
-        halfPlayer;
+    if(
+        playerX <
+        halfWidth
+    ){
 
-
-    const maxX =
-        window.innerWidth -
-        halfPlayer;
-
-
-    if(playerX < minX){
-
-        playerX = minX;
+        playerX =
+            halfWidth;
 
     }
 
 
-    if(playerX > maxX){
+    if(
+        playerX >
+        window.innerWidth -
+        halfWidth
+    ){
 
-        playerX = maxX;
+        playerX =
+            window.innerWidth -
+            halfWidth;
 
     }
 
@@ -599,92 +611,80 @@ updatePlayer();
 
 
 /* =========================
-   BUTTON HELPER
+   MOVE BUTTONS
 ========================= */
 
-function setupMoveButton(
-    button,
-    direction
-){
+function startLeft(e){
 
-    button.addEventListener(
-        "pointerdown",
-        function(e){
+    e.preventDefault();
 
-            e.preventDefault();
-
-            if(direction === "left"){
-
-                movingLeft = true;
-
-            }
-
-            if(direction === "right"){
-
-                movingRight = true;
-
-            }
-
-        }
-    );
-
-
-    button.addEventListener(
-        "pointerup",
-        function(e){
-
-            e.preventDefault();
-
-            if(direction === "left"){
-
-                movingLeft = false;
-
-            }
-
-            if(direction === "right"){
-
-                movingRight = false;
-
-            }
-
-        }
-    );
-
-
-    button.addEventListener(
-        "pointercancel",
-        function(){
-
-            movingLeft = false;
-
-            movingRight = false;
-
-        }
-    );
-
-
-    button.addEventListener(
-        "pointerleave",
-        function(){
-
-            movingLeft = false;
-
-            movingRight = false;
-
-        }
-    );
+    movingLeft = true;
 }
 
 
-setupMoveButton(
-    leftButton,
-    "left"
+function stopLeft(e){
+
+    e.preventDefault();
+
+    movingLeft = false;
+}
+
+
+function startRight(e){
+
+    e.preventDefault();
+
+    movingRight = true;
+}
+
+
+function stopRight(e){
+
+    e.preventDefault();
+
+    movingRight = false;
+}
+
+
+leftButton.addEventListener(
+    "pointerdown",
+    startLeft
+);
+
+leftButton.addEventListener(
+    "pointerup",
+    stopLeft
+);
+
+leftButton.addEventListener(
+    "pointercancel",
+    stopLeft
+);
+
+leftButton.addEventListener(
+    "pointerleave",
+    stopLeft
 );
 
 
-setupMoveButton(
-    rightButton,
-    "right"
+rightButton.addEventListener(
+    "pointerdown",
+    startRight
+);
+
+rightButton.addEventListener(
+    "pointerup",
+    stopRight
+);
+
+rightButton.addEventListener(
+    "pointercancel",
+    stopRight
+);
+
+rightButton.addEventListener(
+    "pointerleave",
+    stopRight
 );
 
 
@@ -743,19 +743,20 @@ document.addEventListener(
 
 /* =========================
    SHOOT
+   BOTTOM → TOP
 ========================= */
 
 function shoot(){
 
     if(gameOver){
-
         return;
-
     }
 
 
     const bullet =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     bullet.className =
@@ -767,11 +768,13 @@ function shoot(){
 
 
     let bulletY =
-        window.innerHeight - 120;
+        window.innerHeight -
+        120;
 
 
     bullet.style.left =
-        (bulletX - 4) + "px";
+        (bulletX - 3) +
+        "px";
 
 
     bullet.style.top =
@@ -783,7 +786,7 @@ function shoot(){
     );
 
 
-    const bulletTimer =
+    const timer =
         setInterval(
             function(){
 
@@ -792,7 +795,7 @@ function shoot(){
                     bullet.remove();
 
                     clearInterval(
-                        bulletTimer
+                        timer
                     );
 
                     return;
@@ -800,17 +803,16 @@ function shoot(){
                 }
 
 
-                /*
-                   BULLET MOVES
-                   BOTTOM → TOP
-                */
+                /* MOVE UP */
 
-                bulletY -= 10;
+                bulletY -= 12;
 
 
                 bullet.style.top =
                     bulletY + "px";
 
+
+                /* CHECK ENEMIES */
 
                 const enemies =
                     document.querySelectorAll(
@@ -853,14 +855,16 @@ function shoot(){
                             );
 
 
-                        if(distance < 35){
+                        if(
+                            distance < 32
+                        ){
 
                             enemy.remove();
 
                             bullet.remove();
 
                             clearInterval(
-                                bulletTimer
+                                timer
                             );
 
 
@@ -880,12 +884,16 @@ function shoot(){
                 );
 
 
-                if(bulletY < -30){
+                /* BULLET OUT */
+
+                if(
+                    bulletY < -30
+                ){
 
                     bullet.remove();
 
                     clearInterval(
-                        bulletTimer
+                        timer
                     );
 
                 }
@@ -914,19 +922,20 @@ fireButton.addEventListener(
 
 /* =========================
    CREATE ENEMY
+   TOP ONLY
 ========================= */
 
 function createEnemy(){
 
     if(gameOver){
-
         return;
-
     }
 
 
     const enemy =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     enemy.className =
@@ -936,14 +945,15 @@ function createEnemy(){
     /*
        RANDOM X
 
-       ALWAYS TOP
+       Y ALWAYS TOP
     */
 
     const enemyX =
         25 +
         Math.random() *
         (
-            window.innerWidth - 50
+            window.innerWidth -
+            50
         );
 
 
@@ -968,7 +978,8 @@ function createEnemy(){
 
 
 /* =========================
-   ENEMY MOVEMENT
+   ENEMY
+   TOP → BOTTOM
 ========================= */
 
 function moveEnemy(enemy){
@@ -989,7 +1000,6 @@ function moveEnemy(enemy){
                     );
 
                     return;
-
                 }
 
 
@@ -1000,7 +1010,10 @@ function moveEnemy(enemy){
 
 
                 /*
-                   TOP → BOTTOM
+                   ONLY DOWN
+
+                   NO LEFT
+                   NO RIGHT
                 */
 
                 enemyY += speed;
@@ -1017,16 +1030,16 @@ function moveEnemy(enemy){
 
 
                 /*
-                   SHOOTER Y
+                   SHOOTER CENTER
                 */
 
-                const playerY =
+                const shooterY =
                     window.innerHeight -
-                    85;
+                    99;
 
 
                 /*
-                   CHECK COLLISION
+                   COLLISION
                 */
 
                 const distance =
@@ -1042,14 +1055,16 @@ function moveEnemy(enemy){
 
                         Math.pow(
                             enemyY -
-                            playerY,
+                            shooterY,
                             2
                         )
 
                     );
 
 
-                if(distance < 45){
+                if(
+                    distance < 45
+                ){
 
                     enemy.remove();
 
@@ -1065,13 +1080,14 @@ function moveEnemy(enemy){
 
 
                 /*
-                   ENEMY PASSED
-                   THE SHOOTER
+                   ENEMY REACHES
+                   BOTTOM
                 */
 
                 if(
                     enemyY >
-                    window.innerHeight + 50
+                    window.innerHeight +
+                    50
                 ){
 
                     enemy.remove();
@@ -1097,9 +1113,7 @@ function moveEnemy(enemy){
 function damagePlayer(){
 
     if(gameOver){
-
         return;
-
     }
 
 
@@ -1107,9 +1121,7 @@ function damagePlayer(){
 
 
     if(health < 0){
-
         health = 0;
-
     }
 
 
@@ -1118,10 +1130,6 @@ function damagePlayer(){
     ).style.width =
         health + "%";
 
-
-    /*
-       PLAYER FLASH
-    */
 
     player.classList.add(
         "hit"
@@ -1145,7 +1153,6 @@ function damagePlayer(){
         endGame();
 
     }
-
 }
 
 
@@ -1202,25 +1209,21 @@ setInterval(
         }
 
     },
-    1200
+    1000
 );
 
 
 /* =========================
-   EXTRA ENEMIES
+   FIRST ENEMY
 ========================= */
 
 setTimeout(
     function(){
 
-        if(!gameOver){
-
-            createEnemy();
-
-        }
+        createEnemy();
 
     },
-    500
+    300
 );
 
 
@@ -1233,7 +1236,8 @@ window.addEventListener(
     function(){
 
         const maxX =
-            window.innerWidth - 25;
+            window.innerWidth -
+            40;
 
 
         if(playerX > maxX){
